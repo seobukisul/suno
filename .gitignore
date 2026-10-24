@@ -1,0 +1,13 @@
+# Security & Temp
+*.pem
+*.key
+.env
+.env.*
+
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# OS artifacts
+.DS_Store
+Thumbs.db

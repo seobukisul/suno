@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suno Pure Audio Studio Capture - W3C Web Audio 격리 기반 무손실 음원 추출 엔진</title>
+  <meta name="description" content="Suno AI 전용 100% 사운드 격리 캡처 확장 프로그램. 외부 소음 0% 침입, 0:00초 완벽 동기화, 16-bit 스튜디오 무손실 WAV 및 320kbps MP3 자동 저장 (네이버 웨일 및 크롬 지원)">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Scroll Progress Indicator -->
+  <div id="scroll-progress-bar"></div>
+
+  <!-- Background Studio Grid Overlay -->
+  <div class="bg-grid-overlay"></div>
+
+  <!-- Interactive Mouse Spotlight Glow -->
+  <div class="cursor-glow" id="cursor-glow"></div>
+
+  <!-- =========================================================================
+       Navigation Header
+       ========================================================================= -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="#hero" class="brand-wrap">
+        <div class="brand-logo-icon">🎙️</div>
+        <div class="brand-text-col">
+          <div class="brand-title">
+            <span>Suno Pure Audio</span>
+            <span class="brand-badge">v1.9.0</span>
+          </div>
+          <span class="brand-sub">Studio Capture Engine</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#simulator" class="nav-link">인터랙티브 체험관</a></li>
+          <li><a href="#features" class="nav-link">핵심 기능</a></li>
+          <li><a href="#architecture" class="nav-link">기술 아키텍처</a></li>
+          <li><a href="#install" class="nav-link">설치 및 사용법</a></li>
+          <li><a href="https://github.com/seobukisul/suno" class="nav-link" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+
+      <a href="https://github.com/seobukisul/suno" class="nav-cta-btn" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        <span>GitHub 저장소</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       Hero Section
+       ========================================================================= -->
+  <section class="hero-section" id="hero">
+    <div class="container hero-content">
+      <div class="hero-pill-badge">
+        <span class="hero-pulse-dot"></span>
+        <span>W3C Web Audio API 100% 사운드 분리 격리 공식 지원</span>
+      </div>
+
+      <h1 class="hero-headline">
+        Suno AI 음원을 <br>
+        <span class="text-gradient">순수 무손실 원음 그대로.</span>
+      </h1>
+
+      <p class="hero-description">
+        유튜브, 디스코드, 윈도우 알림음 등 다른 프로그램의 소리가 <strong>1%도 섞이지 않습니다.</strong><br>
+        Suno 플레이어 파이프라인에서 직접 추출하는 <strong>16-bit 무손실 WAV & 320k MP3 스튜디오 자동 캡처</strong>
+      </p>
+
+      <div class="hero-actions-row">
+        <a href="https://github.com/seobukisul/suno" class="btn-primary" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          <span>GitHub 공식 저장소 바로가기</span>
+        </a>
+        <a href="#simulator" class="btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>라이브 시뮬레이터 체험하기</span>
+        </a>
+      </div>
+
+      <div class="hero-meta-badges">
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>네이버 웨일(Whale) 완벽 지원</span>
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>구글 크롬(Chrome) MV3 표준</span>
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>LameJS 320kbps 실시간 인코딩</span>
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>16-bit Linear PCM 무손실 WAV</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       Interactive Live Simulator Section
+       ========================================================================= -->
+  <section class="simulator-section" id="simulator">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Interactive Live Engine</span>
+        <h2 class="section-title">직접 체험해보는 실시간 캡처 시뮬레이터</h2>
+        <p class="section-desc">
+          실제 Suno 화면과 동일한 환경입니다. 아래 곡 목록의 <strong>[WAV]</strong> 또는 <strong>[MP3]</strong> 버튼을 직접 클릭하여 Web Audio 사운드 격리 캡처와 실시간 VU 메터 HUD를 체험해보세요!
+        </p>
+      </div>
+
+      <!-- 3D Glass Studio Window Mockup -->
+      <div class="studio-mockup-wrapper">
+        <div class="mockup-window-bar">
+          <div class="window-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="mockup-url-bar">
+            <span>🔒 https://suno.com/workspace</span>
+          </div>
+          <div class="mockup-badge">
+            <span>● Pure Audio Isolation Active</span>
+          </div>
+        </div>
+
+        <div class="mockup-body">
+          <div class="mockup-guide-banner">
+            <span>💡 <strong>체험 팁:</strong> 목록 행에 마우스를 올리면 3D 호버 액션이 작동하며, <strong>[WAV]</strong> / <strong>[MP3]</strong>를 누르면 실제 신디사이저 음악이 재생되면서 우측 하단에 하이테크 레코딩 HUD가 나타납니다.</span>
+            <span style="font-family: var(--font-mono); font-size: 11px; color: var(--emerald-light);">[Web Audio Synthesizer 연동]</span>
+          </div>
+
+          <!-- Simulated Song List -->
+          <div class="sim-song-list">
+            
+            <!-- Song 1 -->
+            <div class="sim-song-card" data-id="track1">
+              <div class="sim-card-left">
+                <div class="sim-thumb" style="background: linear-gradient(135deg, #1E293B, #0F172A); display: flex; align-items: center; justify-content: center;">
+                  <span style="font-size: 20px;">🌊</span>
+                  <div class="sim-thumb-play">
+                    <svg class="sim-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                  </div>
+                  <span class="sim-thumb-dur">1:13</span>
+                </div>
+
+                <div class="sim-info-col">
+                  <div class="sim-title-row">
+                    <span class="sim-song-title">다시 시작해</span>
+                    
+                    <!-- Exact v1.8.0 Inline Button Order -->
+                    <div class="sim-dl-group">
+                      <button type="button" class="sim-btn-dl wav" title="16-bit 무손실 WAV로 다운로드">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v4"/><path d="M6 6v12"/><path d="M10 3v18"/><path d="M14 8v8"/><path d="M18 5v14"/><path d="M22 10v4"/></svg>
+                        <span>WAV</span>
+                      </button>
+                      <button type="button" class="sim-btn-dl mp3" title="320k 최고음질 MP3로 다운로드">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                        <span>MP3</span>
+                      </button>
+                    </div>
+
+                    <span class="sim-v-tag">V6</span>
+                  </div>
+                  <span class="sim-prompt-text">Lo-fi chill dance pop, relaxed mellow groove, seamless loopable phrasing, warm tape saturation...</span>
+                </div>
+              </div>
+
+              <div class="sim-card-actions">
+                <button type="button" class="sim-action-btn" title="좋아요">👍</button>
+                <button type="button" class="sim-action-btn" title="싫어요">👎</button>
+                <button type="button" class="sim-action-btn" title="공유">↗️</button>
+              </div>
+            </div>
+
+            <!-- Song 2 -->
+            <div class="sim-song-card" data-id="track2">
+              <div class="sim-card-left">
+                <div class="sim-thumb" style="background: linear-gradient(135deg, #332014, #1F150D); display: flex; align-items: center; justify-content: center;">
+                  <span style="font-size: 20px;">☕</span>
+                  <div class="sim-thumb-play">
+                    <svg class="sim-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                  </div>
+                  <span class="sim-thumb-dur">2:42</span>
+                </div>
+
+                <div class="sim-info-col">
+                  <div class="sim-title-row">
+                    <span class="sim-song-title">따뜻한 카페</span>
+                    
+                    <div class="sim-dl-group">
+                      <button type="button" class="sim-btn-dl wav" title="16-bit 무손실 WAV로 다운로드">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v4"/><path d="M6 6v12"/><path d="M10 3v18"/><path d="M14 8v8"/><path d="M18 5v14"/><path d="M22 10v4"/></svg>
+                        <span>WAV</span>
+                      </button>
+                      <button type="button" class="sim-btn-dl mp3" title="320k 최고음질 MP3로 다운로드">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                        <span>MP3</span>
+                      </button>
+                    </div>
+
+                    <span class="sim-v-tag">V6</span>
+                  </div>
+                  <span class="sim-prompt-text">K-pop emotional ballad, warm mid-range female vocal with a raspy, gravelly acoustic guitar...</span>
+                </div>
+              </div>
+
+              <div class="sim-card-actions">
+                <button type="button" class="sim-action-btn">👍</button>
+                <button type="button" class="sim-action-btn">👎</button>
+                <button type="button" class="sim-action-btn">↗️</button>
+              </div>
+            </div>
+
+            <!-- Song 3 -->
+            <div class="sim-song-card" data-id="track3">
+              <div class="sim-card-left">
+                <div class="sim-thumb" style="background: linear-gradient(135deg, #1E293B, #172554); display: flex; align-items: center; justify-content: center;">
+                  <span style="font-size: 20px;">🌙</span>
+                  <div class="sim-thumb-play">
+                    <svg class="sim-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                  </div>
+                  <span class="sim-thumb-dur">2:53</span>
+                </div>
+
+                <div class="sim-info-col">
+                  <div class="sim-title-row">
+                    <span class="sim-song-title">푹 쉬렴 오늘 밤</span>
+                    
+                    <div class="sim-dl-group">
+                      <button type="button" class="sim-btn-dl wav" title="16-bit 무손실 WAV로 다운로드">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v4"/><path d="M6 6v12"/><path d="M10 3v18"/><path d="M14 8v8"/><path d="M18 5v14"/><path d="M22 10v4"/></svg>
+                        <span>WAV</span>
+                      </button>
+                      <button type="button" class="sim-btn-dl mp3" title="320k 최고음질 MP3로 다운로드">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                        <span>MP3</span>
+                      </button>
+                    </div>
+
+                    <span class="sim-v-tag">V6</span>
+                  </div>
+                  <span class="sim-prompt-text">Korean Ballad, soft string-section layering over piano and strings, opening with sparse chords...</span>
+                </div>
+              </div>
+
+              <div class="sim-card-actions">
+                <button type="button" class="sim-action-btn">👍</button>
+                <button type="button" class="sim-action-btn">👎</button>
+                <button type="button" class="sim-action-btn">↗️</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Simulated Bottom Player Bar -->
+          <div class="sim-player-bar">
+            <!-- Left Info & Inlined Buttons (v1.8.0 Pattern) -->
+            <div class="sim-player-left">
+              <div class="sim-player-thumb" id="sim-player-thumb" style="background: linear-gradient(135deg, #1E293B, #0F172A); display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                🌊
+              </div>
+              <div class="sim-player-info">
+                <div class="sim-player-title-row">
+                  <span class="sim-player-title" id="sim-player-title">다시 시작해</span>
+
+                  <!-- Player Bar Download Buttons (Exact 2 buttons, inline) -->
+                  <div class="sim-dl-group">
+                    <button type="button" class="sim-btn-dl wav" id="sim-player-bar-wav" title="현재 곡 16-bit WAV 즉시 다운로드">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v4"/><path d="M6 6v12"/><path d="M10 3v18"/><path d="M14 8v8"/><path d="M18 5v14"/><path d="M22 10v4"/></svg>
+                      <span>WAV</span>
+                    </button>
+                    <button type="button" class="sim-btn-dl mp3" id="sim-player-bar-mp3" title="현재 곡 320k MP3 즉시 다운로드">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                      <span>MP3</span>
+                    </button>
+                  </div>
+                </div>
+                <span class="sim-player-artist" id="sim-player-artist">june</span>
+              </div>
+            </div>
+
+            <!-- Center Controls & Scrubber -->
+            <div class="sim-player-center">
+              <div class="sim-controls-row">
+                <button type="button" class="sim-ctrl-btn" title="셔플">🔀</button>
+                <button type="button" class="sim-ctrl-btn" title="이전 곡">⏮</button>
+                <button type="button" class="sim-ctrl-btn play-circle" id="sim-main-play-btn" title="재생/일시정지">▶</button>
+                <button type="button" class="sim-ctrl-btn" title="다음 곡">⏭</button>
+                <button type="button" class="sim-ctrl-btn" title="반복">🔁</button>
+              </div>
+              <div class="sim-progress-row">
+                <span class="sim-time-text" id="sim-player-current">0:00</span>
+                <div class="sim-scrub-bar">
+                  <div class="sim-scrub-fill" id="sim-player-fill"></div>
+                </div>
+                <span class="sim-time-text" id="sim-player-duration">1:13</span>
+              </div>
+            </div>
+
+            <!-- Right Indicators -->
+            <div style="font-size: 12px; color: var(--emerald-light); font-weight: 700; display: flex; align-items: center; gap: 6px;">
+              <span>🎙️ Studio Stream Active</span>
+            </div>
+          </div>
+
+          <!-- Real-Time Floating HUD Overlay (Appears on Capture) -->
+          <div class="sim-hud-overlay" id="sim-hud-overlay">
+            <div class="hud-top-bar">
+              <div class="hud-title-wrap">
+                <span class="hud-rec-dot"></span>
+                <span class="hud-song-name" id="sim-hud-title">다시 시작해</span>
+              </div>
+              <span class="hud-format-badge wav" id="sim-hud-badge">WAV</span>
+            </div>
+
+            <!-- 14-Band Live Equalizer VU Meter -->
+            <div class="hud-vu-meter">
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+              <div class="vu-bar"></div>
+            </div>
+
+            <div class="hud-progress-info">
+              <span id="sim-hud-current">0:00</span>
+              <span id="sim-hud-duration">1:13</span>
+            </div>
+            <div class="hud-progress-bar-bg">
+              <div class="hud-progress-bar-fill" id="sim-hud-fill"></div>
+            </div>
+
+            <div class="hud-btn-actions">
+              <button type="button" class="hud-btn finish" id="sim-hud-finish-btn">⏹️ 여기까지 다운로드</button>
+              <button type="button" class="hud-btn cancel" id="sim-hud-cancel-btn">❌ 취소</button>
+            </div>
+
+            <label class="hud-mute-toggle">
+              <input type="checkbox" id="sim-hud-mute">
+              <span>🔇 스피커 소리 끄기 (조용히 캡처)</span>
+            </label>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       Core Features Section (3D Tilt Cards)
+       ========================================================================= -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Core Capabilities</span>
+        <h2 class="section-title">스튜디오 마스터링 급 오디오 캡처 기술</h2>
+        <p class="section-desc">
+          일반적인 사운드카드 스테레오 믹스 녹음의 한계를 완전히 극복한 순수 W3C Web Audio 파이프라인 격리 기술을 탑재했습니다.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        
+        <!-- Card 1 -->
+        <div class="feature-card">
+          <div class="feature-icon-box">🛡️</div>
+          <h3 class="feature-card-title">100% 사운드 분리 격리</h3>
+          <p class="feature-card-desc">
+            유튜브, 디스코드, 컴퓨터 카톡 알림음, 게임 소리가 <strong>1%도 녹음 파일에 들어가지 않습니다.</strong> 오직 Suno 플레이어 내부 오디오 그래프에만 직접 연결되어 순수 원음만 추출합니다.
+          </p>
+          <div class="feature-tags">
+            <span class="f-tag">W3C AudioContext</span>
+            <span class="f-tag">Zero Noise</span>
+            <span class="f-tag">Cross-App Isolation</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="feature-card">
+          <div class="feature-icon-box">💎</div>
+          <h3 class="feature-card-title">16-bit WAV & 320k MP3</h3>
+          <p class="feature-card-desc">
+            PCM 원시 버퍼를 무손실 16-bit 44.1kHz WAV로 즉시 빌드하거나, LameJS 코어 엔진을 통해 320kbps 최고음질 MP3로 실시간 듀얼 채널 인코딩하여 스튜디오 퀄리티를 유지합니다.
+          </p>
+          <div class="feature-tags">
+            <span class="f-tag">16-bit Linear PCM</span>
+            <span class="f-tag">320kbps MP3</span>
+            <span class="f-tag">LameJS Engine</span>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="feature-card">
+          <div class="feature-icon-box">🔄</div>
+          <h3 class="feature-card-title">0:00초 완벽 자동 동기화</h3>
+          <p class="feature-card-desc">
+            WAV 또는 MP3 버튼을 누르면 플레이어가 <strong>스스로 곡의 0:00초로 자동 이동하여 재생을 시작</strong>하고, 곡이 끝나는 순간 파일 저장이 자동으로 완료됩니다.
+          </p>
+          <div class="feature-tags">
+            <span class="f-tag">Auto Seek 0:00</span>
+            <span class="f-tag">Auto End Trigger</span>
+            <span class="f-tag">Zero Click Hassle</span>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="feature-card">
+          <div class="feature-icon-box">🎯</div>
+          <h3 class="feature-card-title">동일 제목 생성 쌍 완벽 분리</h3>
+          <p class="feature-card-desc">
+            Suno가 프롬프트마다 2곡씩 생성하여 제목이 똑같은 최신 상위 2곡에 대해서도, 고유 UUID 및 재생 시간 대조 알고리즘으로 다른 곡이 재생되는 오류를 100% 원천 차단했습니다.
+          </p>
+          <div class="feature-tags">
+            <span class="f-tag">UUID ClipID Matching</span>
+            <span class="f-tag">Duration Differentiator</span>
+            <span class="f-tag">Top-2 Pair Safety</span>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="feature-card">
+          <div class="feature-icon-box">🎛️</div>
+          <h3 class="feature-card-title">제목 바로 옆 원클릭 다운로드</h3>
+          <p class="feature-card-desc">
+            Suno 곡 목록 행과 하단 고정 플레이어 바의 곡 제목 바로 오른쪽에 깔끔한 인라인 버튼이 밀착 배치되어, 번거로운 다운로드 팝업 없이 원클릭으로 바로 다운로드가 시작됩니다.
+          </p>
+          <div class="feature-tags">
+            <span class="f-tag">Inlined Row Buttons</span>
+            <span class="f-tag">Player Bar Dock</span>
+            <span class="f-tag">Zero Duplication</span>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="feature-card">
+          <div class="feature-icon-box">📊</div>
+          <h3 class="feature-card-title">실시간 HUD & 구간 추출</h3>
+          <p class="feature-card-desc">
+            화면 우측 하단에 뜨는 14채널 이퀄라이저 VU 메터로 녹음 신호를 실시간 모니터링하며, <strong>[⏹️ 여기까지 다운로드]</strong> 버튼으로 원하는 구간만 잘라서 즉시 저장할 수 있습니다.
+          </p>
+          <div class="feature-tags">
+            <span class="f-tag">14-Band VU Meter</span>
+            <span class="f-tag">Section Cut</span>
+            <span class="f-tag">Silent Mode Toggle</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       Technical Architecture & Comparison Section
+       ========================================================================= -->
+  <section class="architecture-section" id="architecture">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Engineering Architecture</span>
+        <h2 class="section-title">일반 녹음 프로그램과의 결정적 차이</h2>
+        <p class="section-desc">
+          사운드카드 스테레오 믹스 방식과 브라우저 내부 Web Audio 격리 파이프라인의 구조적 우수성을 비교해보세요.
+        </p>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="comparison-wrapper">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>비교 항목</th>
+              <th>일반 사운드카드 녹음 (스테레오 믹스)</th>
+              <th class="highlight">Suno Pure Audio Studio Capture</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>외부 소음 유입</strong></td>
+              <td><span class="badge-comp-bad">❌ 컴퓨터 알림음, 디스코드, 유튜브 소리 모두 녹음됨</span></td>
+              <td class="highlight"><span class="badge-comp-good">✅ 100% 차단 (Suno 플레이어만 단독 격리 캡처)</span></td>
+            </tr>
+            <tr>
+              <td><strong>음질 손실 (리샘플링)</strong></td>
+              <td><span class="badge-comp-bad">❌ OS 사운드카드 믹서를 거치며 음질 열화 및 감쇄</span></td>
+              <td class="highlight"><span class="badge-comp-good">✅ 16-bit 44.1kHz 스튜디오 마스터링 무손실 원음 보존</span></td>
+            </tr>
+            <tr>
+              <td><strong>조용히 캡처 (스피커 끄기)</strong></td>
+              <td><span class="badge-comp-bad">❌ 볼륨을 줄이면 녹음 볼륨도 함께 줄어들거나 무음 처리</span></td>
+              <td class="highlight"><span class="badge-comp-good">✅ 귀에는 무음, 녹음은 100% 디지털 원음 그대로 진행</span></td>
+            </tr>
+            <tr>
+              <td><strong>시작/종료 타이밍</strong></td>
+              <td><span class="badge-comp-bad">❌ 사용자가 재생 누르고 녹음 시작을 수동으로 맞춰야 함</span></td>
+              <td class="highlight"><span class="badge-comp-good">✅ 버튼 하나로 0:00초 자동 되감기 & 완곡 시 자동 저장</span></td>
+            </tr>
+            <tr>
+              <td><strong>다운로드 포맷</strong></td>
+              <td>기본 설정된 저음질 MP3 또는 수동 인코딩 필요</td>
+              <td class="highlight">16-bit 무손실 WAV 및 320k 초고음질 MP3 원클릭 선택</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pipeline Flow Graph -->
+      <div class="pipeline-flow-box">
+        <div class="pipe-step">
+          <div class="pipe-icon">🎵</div>
+          <div class="pipe-title">Suno &lt;audio&gt; Node</div>
+          <div class="pipe-desc">브라우저 네이티브 오디오 소스 캡처</div>
+        </div>
+
+        <div class="pipe-arrow">➔</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon">🛡️</div>
+          <div class="pipe-title">MediaElementSource</div>
+          <div class="pipe-desc">W3C Web Audio 그래프에 단독 연결</div>
+        </div>
+
+        <div class="pipe-arrow">➔</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon">🎛️</div>
+          <div class="pipe-title">ScriptProcessorNode</div>
+          <div class="pipe-desc">실시간 좌/우 듀얼 채널 PCM 청크 수집</div>
+        </div>
+
+        <div class="pipe-arrow">➔</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon">📊</div>
+          <div class="pipe-title">Analyser & VU Meter</div>
+          <div class="pipe-desc">14밴드 주파수 시각화 & 실시간 HUD</div>
+        </div>
+
+        <div class="pipe-arrow">➔</div>
+
+        <div class="pipe-step">
+          <div class="pipe-icon">💾</div>
+          <div class="pipe-title">WAV & MP3 Encoder</div>
+          <div class="pipe-desc">무손실 WAV 빌드 & LameJS 320k 저장</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       Installation Guide Section
+       ========================================================================= -->
+  <section class="install-section" id="install">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Easy Setup</span>
+        <h2 class="section-title">1분 만에 끝나는 초간단 설치법</h2>
+        <p class="section-desc">
+          네이버 웨일 및 구글 크롬 브라우저에서 확장 프로그램 압축을 해제하고 바로 등록하여 사용하실 수 있습니다.
+        </p>
+      </div>
+
+      <!-- Browser Tabs -->
+      <div class="install-tabs-nav">
+        <button type="button" class="tab-btn active" id="tab-whale">
+          <span>🐳</span> 네이버 웨일 (Naver Whale)
+        </button>
+        <button type="button" class="tab-btn" id="tab-chrome">
+          <span>🌐</span> 구글 크롬 (Google Chrome)
+        </button>
+      </div>
+
+      <!-- Whale Steps -->
+      <div class="steps-grid" id="steps-whale">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3 class="step-title">GitHub 저장소 받기</h3>
+          <p class="step-desc">
+            GitHub 공식 저장소(<code>https://github.com/seobukisul/suno</code>)에서 소스코드를 클론하거나 다운로드합니다.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3 class="step-title">웨일 확장앱 관리자 열기</h3>
+          <p class="step-desc">
+            웨일 브라우저 주소창에 아래 주소를 입력하여 확장앱 관리자 페이지로 이동합니다.
+          </p>
+          <div class="step-code-box">
+            <span>whale://extensions</span>
+            <button type="button" class="step-code-copy copy-path-btn" data-path="whale://extensions" title="복사">📋</button>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3 class="step-title">[개발자 모드] 및 [압축해제 설치]</h3>
+          <p class="step-desc">
+            우측 상단의 <strong>[개발자 모드]</strong> 토글을 켠 뒤, 상단에 나타나는 <strong>[압축해제 된 확장앱 설치]</strong>를 누르고 압축을 푼 폴더를 선택합니다.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <h3 class="step-title">Suno 웹에서 바로 사용</h3>
+          <p class="step-desc">
+            <code>suno.com</code> 탭을 새로고침(F5)하면 곡 제목 옆과 플레이어 바에 <strong>[WAV] [MP3]</strong> 버튼이 생성됩니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- Chrome Steps -->
+      <div class="steps-grid" id="steps-chrome" style="display: none;">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3 class="step-title">GitHub 저장소 받기</h3>
+          <p class="step-desc">
+            GitHub 공식 저장소(<code>https://github.com/seobukisul/suno</code>)에서 소스코드를 다운로드하거나 클론합니다.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3 class="step-title">크롬 확장 프로그램 관리자 열기</h3>
+          <p class="step-desc">
+            크롬 주소창에 아래 주소를 입력하여 확장 프로그램 페이지로 이동합니다.
+          </p>
+          <div class="step-code-box">
+            <span>chrome://extensions</span>
+            <button type="button" class="step-code-copy copy-path-btn" data-path="chrome://extensions" title="복사">📋</button>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3 class="step-title">개발자 모드 & 폴더 로드</h3>
+          <p class="step-desc">
+            우측 상단 <strong>[개발자 모드]</strong>를 활성화하고 좌측 상단 <strong>[압축해제된 확장 프로그램을 로드합니다]</strong>를 클릭하여 폴더를 지정합니다.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <h3 class="step-title">설치 완료</h3>
+          <p class="step-desc">
+            이제 <code>suno.com</code>에 접속하면 원클릭 무손실 WAV 및 320k MP3 캡처 버튼이 완벽하게 작동합니다!
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       Download Center Section
+       ========================================================================= -->
+  <section class="download-section" id="download">
+    <div class="container">
+      <div class="download-master-card">
+        <div class="dl-card-content">
+          <div class="dl-card-icon">📦</div>
+          <h2 class="dl-card-title">Suno Pure Audio Studio Capture</h2>
+          <p class="dl-card-desc">
+            GitHub 공식 배포 저장소(<code>https://github.com/seobukisul/suno</code>)에서 최신 소스코드와 릴리즈 패키지를 확인하실 수 있습니다.<br>
+            프로젝트를 클론하거나 다운로드하여 브라우저 확장앱 관리자에 등록하시면 즉시 사용하실 수 있습니다.
+          </p>
+
+          <div class="dl-action-wrap">
+            <a href="https://github.com/seobukisul/suno" class="btn-download-mega" id="btn-download-repo" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              <span>GitHub 공식 저장소 바로가기</span>
+            </a>
+          </div>
+
+          <div class="dl-package-info">
+            <span>🔖 Version: <strong>v1.9.0 Latest</strong></span>
+            <span>🌐 Browser: <strong>Whale & Chrome</strong></span>
+            <span>📦 Open Source: <strong>GitHub Official</strong></span>
+          </div>
+        </div>
+
+        <!-- Source Explorer List -->
+        <div class="source-explorer-box">
+          <div class="explorer-header">
+            <div class="explorer-title">
+              <span>📂</span>
+              <span>확장 프로그램 포함 소스 파일 구성</span>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">Manifest V3 Production Ready</span>
+          </div>
+
+          <ul class="explorer-files-list">
+            <li class="explorer-file-item">
+              <div class="file-name-wrap">
+                <span>⚙️</span>
+                <span>manifest.json</span>
+              </div>
+              <span class="file-tag">MV3 Config</span>
+            </li>
+            <li class="explorer-file-item">
+              <div class="file-name-wrap">
+                <span>📜</span>
+                <span>content_script.js</span>
+              </div>
+              <span class="file-tag">DOM Injector</span>
+            </li>
+            <li class="explorer-file-item">
+              <div class="file-name-wrap">
+                <span>🎙️</span>
+                <span>recorder_bridge.js</span>
+              </div>
+              <span class="file-tag">Web Audio Core</span>
+            </li>
+            <li class="explorer-file-item">
+              <div class="file-name-wrap">
+                <span>🎨</span>
+                <span>content_style.css</span>
+              </div>
+              <span class="file-tag">Studio Dark HUD</span>
+            </li>
+            <li class="explorer-file-item">
+              <div class="file-name-wrap">
+                <span>⚡</span>
+                <span>lame.min.js</span>
+              </div>
+              <span class="file-tag">MP3 Encoder 320k</span>
+            </li>
+            <li class="explorer-file-item">
+              <div class="file-name-wrap">
+                <span>🎛️</span>
+                <span>popup.html & popup.js</span>
+              </div>
+              <span class="file-tag">Extension Popup</span>
+            </li>
+            <li class="explorer-file-item">
+              <div class="file-name-wrap">
+                <span>🖼️</span>
+                <span>icons/ (16, 48, 128)</span>
+              </div>
+              <span class="file-tag">App Icons</span>
+            </li>
+            <li class="explorer-file-item">
+              <div class="file-name-wrap">
+                <span>📖</span>
+                <span>README.md</span>
+              </div>
+              <span class="file-tag">Documentation</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       Site Footer
+       ========================================================================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="brand-wrap">
+          <div class="brand-logo-icon">🎙️</div>
+          <div class="brand-text-col">
+            <div class="brand-title">Suno Pure Audio Studio Capture</div>
+            <span class="brand-sub">W3C Web Audio API Isolation Technology</span>
+          </div>
+        </div>
+
+        <div class="footer-protocol-tag">
+          <span>⚡ Designed & Engineered with J.A.R.V.I.S. Core Protocol</span>
+        </div>
+      </div>
+
+      <div class="footer-copy">
+        <p>© 2026 Suno Pure Audio Studio Capture. All rights reserved. Supported on Naver Whale & Google Chrome.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
