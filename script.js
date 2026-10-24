@@ -542,14 +542,6 @@
         });
       });
     });
-
-    // 8. GitHub Repo Mega Button
-    const dlBtnRepo = document.getElementById('btn-download-repo');
-    if (dlBtnRepo) {
-      dlBtnRepo.addEventListener('click', () => {
-        showToast('🚀 GitHub 공식 저장소로 이동합니다!');
-      });
-    }
   });
 
   function updatePlayerBarMetadata(track) {
