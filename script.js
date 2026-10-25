@@ -542,6 +542,14 @@
         });
       });
     });
+
+    // 8. ZIP Download Button Toast
+    const btnDlZip = document.getElementById('btn-download-zip');
+    if (btnDlZip) {
+      btnDlZip.addEventListener('click', () => {
+        showToast('📦 Suno Pure Audio Studio Capture (v1.9.0.zip) 다운로드를 시작합니다!');
+      });
+    }
   });
 
   function updatePlayerBarMetadata(track) {
