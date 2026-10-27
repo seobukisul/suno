@@ -590,6 +590,8 @@
         targetViewId = 'view-pro';
       }
 
+      window.scrollTo({ top: 0, behavior: 'instant' });
+
       // Update active nav links
       document.querySelectorAll('.nav-links .nav-link').forEach(link => {
         if (link.dataset.targetView === targetViewId) {
