@@ -670,33 +670,31 @@
             </p>
           </div>
 
-          <!-- Studio Mockup Outer Frame -->
+          <!-- 3D Glass Studio Window Mockup -->
           <div class="studio-mockup-wrapper">
-            <div class="mockup-header-bar">
-              <div class="window-controls">
-                <span class="win-btn close"></span>
-                <span class="win-btn min"></span>
-                <span class="win-btn max"></span>
+            <div class="mockup-window-bar">
+              <div class="window-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
               </div>
-              <div class="browser-address-bar">
-                <span class="lock-icon">🔒</span>
-                <span class="addr-text">https://suno.com/workspace</span>
+              <div class="mockup-url-bar">
+                <span>🔒 https://suno.com/workspace</span>
               </div>
               <div class="mockup-badge">
-                <span class="badge-dot"></span>
-                <span>Pure Audio Isolation Active</span>
+                <span>● Pure Audio Isolation Active</span>
               </div>
             </div>
 
-            <!-- Mockup Content Canvas -->
-            <div class="mockup-content-body">
-              <div class="sim-guide-banner">
-                <span>💡 <strong>체험 팁:</strong> 목록 행에 마우스를 올리면 3D 호버 액션이 작동하며, <strong>[WAV] / [MP3]</strong>를 누르면 실제 신디사이저 음악이 재생되면서 우측 하단에 하이테크 레코딩 HUD가 나타납니다.</span>
-                <span class="sim-guide-badge">[Web Audio Synthesizer 연동]</span>
+            <div class="mockup-body">
+              <div class="mockup-guide-banner">
+                <span>💡 <strong>체험 팁:</strong> 목록 행에 마우스를 올리면 3D 호버 액션이 작동하며, <strong>[WAV]</strong> / <strong>[MP3]</strong>를 누르면 실제 신디사이저 음악이 재생되면서 우측 하단에 하이테크 레코딩 HUD가 나타납니다.</span>
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--emerald-light);">[Web Audio Synthesizer 연동]</span>
               </div>
 
               <!-- Simulated Song List -->
               <div class="sim-song-list">
+                
                 <!-- Song 1 -->
                 <div class="sim-song-card" data-id="track1">
                   <div class="sim-card-left">
@@ -712,6 +710,7 @@
                       <div class="sim-title-row">
                         <span class="sim-song-title">다시 시작해</span>
                         
+                        <!-- Exact v1.8.0 Inline Button Order -->
                         <div class="sim-dl-group">
                           <button type="button" class="sim-btn-dl wav" title="16-bit 무손실 WAV로 다운로드">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v4"/><path d="M6 6v12"/><path d="M10 3v18"/><path d="M14 8v8"/><path d="M18 5v14"/><path d="M22 10v4"/></svg>
@@ -813,73 +812,86 @@
                     <button type="button" class="sim-action-btn">↗️</button>
                   </div>
                 </div>
+
               </div>
 
-              <!-- Suno Bottom Persistent Player Bar -->
+              <!-- Simulated Bottom Player Bar -->
               <div class="sim-player-bar">
+                <!-- Left Info & Inlined Buttons (v1.8.0 Pattern) -->
                 <div class="sim-player-left">
-                  <div class="sim-player-thumb" id="sim-player-thumb">🌊</div>
-                  <div class="sim-player-meta">
-                    <span class="sim-player-title" id="sim-player-title">다시 시작해</span>
+                  <div class="sim-player-thumb" id="sim-player-thumb" style="background: linear-gradient(135deg, #1E293B, #0F172A); display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    🌊
+                  </div>
+                  <div class="sim-player-info">
+                    <div class="sim-player-title-row">
+                      <span class="sim-player-title" id="sim-player-title">다시 시작해</span>
+
+                      <!-- Player Bar Download Buttons (Exact 2 buttons, inline) -->
+                      <div class="sim-dl-group">
+                        <button type="button" class="sim-btn-dl wav" id="sim-player-bar-wav" title="현재 곡 16-bit WAV 즉시 다운로드">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v4"/><path d="M6 6v12"/><path d="M10 3v18"/><path d="M14 8v8"/><path d="M18 5v14"/><path d="M22 10v4"/></svg>
+                          <span>WAV</span>
+                        </button>
+                        <button type="button" class="sim-btn-dl mp3" id="sim-player-bar-mp3" title="현재 곡 320k MP3 즉시 다운로드">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                          <span>MP3</span>
+                        </button>
+                      </div>
+                    </div>
                     <span class="sim-player-artist" id="sim-player-artist">june</span>
                   </div>
-                  
-                  <div class="sim-player-dl-btns">
-                    <button type="button" class="sim-btn-dl-player wav" id="sim-bar-wav">
-                      <span>WAV</span>
-                    </button>
-                    <button type="button" class="sim-btn-dl-player mp3" id="sim-bar-mp3">
-                      <span>MP3</span>
-                    </button>
-                  </div>
                 </div>
 
+                <!-- Center Controls & Scrubber -->
                 <div class="sim-player-center">
-                  <div class="sim-player-controls">
-                    <button type="button" class="sim-ctrl-btn">🔀</button>
-                    <button type="button" class="sim-ctrl-btn">⏮️</button>
-                    <button type="button" class="sim-ctrl-play-btn" id="sim-main-play-btn">▶️</button>
-                    <button type="button" class="sim-ctrl-btn">⏭️</button>
-                    <button type="button" class="sim-ctrl-btn">🔁</button>
+                  <div class="sim-controls-row">
+                    <button type="button" class="sim-ctrl-btn" title="셔플">🔀</button>
+                    <button type="button" class="sim-ctrl-btn" title="이전 곡">⏮</button>
+                    <button type="button" class="sim-ctrl-btn play-circle" id="sim-main-play-btn" title="재생/일시정지">▶</button>
+                    <button type="button" class="sim-ctrl-btn" title="다음 곡">⏭</button>
+                    <button type="button" class="sim-ctrl-btn" title="반복">🔁</button>
                   </div>
-                  <div class="sim-player-timeline">
-                    <span class="sim-time current" id="sim-time-cur">0:00</span>
-                    <div class="sim-timeline-bar">
-                      <div class="sim-timeline-progress" id="sim-timeline-progress"></div>
+                  <div class="sim-progress-row">
+                    <span class="sim-time-text" id="sim-player-current">0:00</span>
+                    <div class="sim-scrub-bar">
+                      <div class="sim-scrub-fill" id="sim-player-fill"></div>
                     </div>
-                    <span class="sim-time duration" id="sim-time-dur">1:13</span>
+                    <span class="sim-time-text" id="sim-player-duration">1:13</span>
                   </div>
                 </div>
 
-                <div class="sim-player-right">
-                  <span class="sim-status-chip">
-                    <span class="sim-chip-dot"></span>
-                    <span>Studio Stream Active</span>
-                  </span>
+                <!-- Right Indicators -->
+                <div style="font-size: 12px; color: var(--emerald-light); font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                  <span>🎙️ Studio Stream Active</span>
                 </div>
               </div>
 
-              <!-- High-Tech Recording HUD -->
-              <div class="sim-recording-hud" id="sim-recording-hud">
-                <div class="hud-top-row">
-                  <div class="hud-indicator">
+              <!-- Real-Time Floating HUD Overlay (Appears on Capture) -->
+              <div class="sim-hud-overlay" id="sim-hud-overlay">
+                <div class="hud-top-bar">
+                  <div class="hud-title-wrap">
                     <span class="hud-rec-dot"></span>
-                    <span class="hud-rec-label">REC LIVE</span>
+                    <span class="hud-song-name" id="sim-hud-title">다시 시작해</span>
                   </div>
-                  <div class="hud-format-badge" id="sim-hud-format-badge">16-bit WAV (PCM)</div>
+                  <span class="hud-format-badge wav" id="sim-hud-badge">WAV</span>
                 </div>
 
-                <div class="hud-track-name" id="sim-hud-track-name">다시 시작해</div>
-                <div class="hud-track-artist">Suno Web Audio Graph 격리 캡처 중...</div>
-
-                <div class="hud-vu-meter-container">
-                  <div class="hud-vu-meter-bars" id="sim-vu-bars">
-                    <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
-                    <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
-                    <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
-                    <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
-                    <div class="vu-bar"></div><div class="vu-bar"></div>
-                  </div>
+                <!-- 14-Band Live Equalizer VU Meter -->
+                <div class="hud-vu-meter">
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
+                  <div class="vu-bar"></div>
                 </div>
 
                 <div class="hud-progress-info">

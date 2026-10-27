@@ -558,6 +558,7 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
+  position: relative;
 }
 
 .mockup-guide-banner {
