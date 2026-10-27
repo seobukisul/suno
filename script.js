@@ -559,6 +559,515 @@
         showToast('👑 JENT STUDIO PRO v2.6.0은 현재 최종 빌드 검증 및 결제 시스템 연동 중입니다. 곧 정식 출시됩니다!');
       });
     }
+
+    // =========================================================================
+    // 10. Multi-View Page Switcher (PRO / Free / Board / Pricing / Download)
+    // =========================================================================
+    const viewMap = {
+      '#pro': 'view-pro',
+      '#free': 'view-free',
+      '#board': 'view-board',
+      '#pricing': 'view-pricing',
+      '#download': 'view-download'
+    };
+
+    function switchView(targetViewId, pushHash = true) {
+      const views = document.querySelectorAll('.studio-view');
+      let found = false;
+
+      views.forEach(v => {
+        if (v.id === targetViewId) {
+          v.classList.add('active');
+          found = true;
+        } else {
+          v.classList.remove('active');
+        }
+      });
+
+      if (!found) {
+        const defaultView = document.getElementById('view-pro');
+        if (defaultView) defaultView.classList.add('active');
+        targetViewId = 'view-pro';
+      }
+
+      // Update active nav links
+      document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+        if (link.dataset.targetView === targetViewId) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+
+      // Update URL hash
+      if (pushHash) {
+        for (const [hash, vid] of Object.entries(viewMap)) {
+          if (vid === targetViewId) {
+            if (window.location.hash !== hash) {
+              history.pushState(null, '', hash);
+            }
+            break;
+          }
+        }
+      }
+
+      // Smooth scroll to top of view
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Handle all links with data-target-view
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-target-view]');
+      if (link) {
+        const targetView = link.dataset.targetView;
+        if (targetView) {
+          e.preventDefault();
+          switchView(targetView);
+        }
+      }
+    });
+
+    // Hash route listener
+    function handleHashRoute() {
+      const currentHash = window.location.hash || '#pro';
+      const targetVid = viewMap[currentHash] || 'view-pro';
+      switchView(targetVid, false);
+    }
+    window.addEventListener('hashchange', handleHashRoute);
+    handleHashRoute();
+
+    // =========================================================================
+    // 11. Simple Email Signup & Login System (LocalStorage Persistence)
+    // =========================================================================
+    const AUTH_STORAGE_KEY = 'jent_auth_user';
+    const authModal = document.getElementById('auth-modal');
+    const btnHeaderLogin = document.getElementById('btn-header-login');
+    const btnCloseAuthModal = document.getElementById('btn-close-auth-modal');
+    const tabAuthLogin = document.getElementById('tab-auth-login');
+    const tabAuthSignup = document.getElementById('tab-auth-signup');
+    const formLogin = document.getElementById('form-login');
+    const formSignup = document.getElementById('form-signup');
+    const userProfileBadge = document.getElementById('user-profile-badge');
+    const userDisplayEmail = document.getElementById('user-display-email');
+    const userDisplayPlan = document.getElementById('user-display-plan');
+    const btnHeaderLogout = document.getElementById('btn-header-logout');
+
+    function openAuthModal(mode = 'login') {
+      if (!authModal) return;
+      if (mode === 'signup') {
+        tabAuthSignup?.click();
+      } else {
+        tabAuthLogin?.click();
+      }
+      authModal.style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+      if (authModal) authModal.style.display = 'none';
+    }
+
+    function getStoredUser() {
+      try {
+        const data = localStorage.getItem(AUTH_STORAGE_KEY);
+        return data ? JSON.parse(data) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function updateHeaderAuthState() {
+      const user = getStoredUser();
+      if (user && user.email) {
+        if (btnHeaderLogin) btnHeaderLogin.style.display = 'none';
+        if (userProfileBadge) {
+          userProfileBadge.style.display = 'flex';
+          if (userDisplayEmail) userDisplayEmail.textContent = user.nickname || user.email.split('@')[0];
+          if (userDisplayPlan) userDisplayPlan.textContent = user.plan || 'PRO 👑';
+        }
+      } else {
+        if (btnHeaderLogin) btnHeaderLogin.style.display = 'block';
+        if (userProfileBadge) userProfileBadge.style.display = 'none';
+      }
+    }
+
+    if (btnHeaderLogin) btnHeaderLogin.addEventListener('click', () => openAuthModal('login'));
+    if (btnCloseAuthModal) btnCloseAuthModal.addEventListener('click', closeAuthModal);
+
+    if (tabAuthLogin && tabAuthSignup && formLogin && formSignup) {
+      tabAuthLogin.addEventListener('click', () => {
+        tabAuthLogin.classList.add('active');
+        tabAuthSignup.classList.remove('active');
+        formLogin.style.display = 'flex';
+        formSignup.style.display = 'none';
+      });
+
+      tabAuthSignup.addEventListener('click', () => {
+        tabAuthSignup.classList.add('active');
+        tabAuthLogin.classList.remove('active');
+        formLogin.style.display = 'none';
+        formSignup.style.display = 'flex';
+      });
+    }
+
+    // Handle Login Submit
+    if (formLogin) {
+      formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim();
+        const user = {
+          email,
+          nickname: email.split('@')[0],
+          plan: 'PRO 👑',
+          loggedInAt: new Date().toISOString()
+        };
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+        updateHeaderAuthState();
+        closeAuthModal();
+        showToast(`🎉 환영합니다, ${user.nickname}님! 성공적으로 로그인되었습니다.`);
+      });
+    }
+
+    // Handle Signup Submit
+    if (formSignup) {
+      formSignup.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nickname = document.getElementById('signup-nickname').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const pw = document.getElementById('signup-password').value;
+        const pwConfirm = document.getElementById('signup-password-confirm').value;
+
+        if (pw !== pwConfirm) {
+          showToast('⚠️ 비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+          return;
+        }
+
+        const user = {
+          email,
+          nickname,
+          plan: 'PRO 얼리버드 👑',
+          joinedAt: new Date().toISOString()
+        };
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+        updateHeaderAuthState();
+        closeAuthModal();
+        showToast(`✨ 회원가입을 축하합니다, ${nickname}님! PRO 혜택이 적용되었습니다.`);
+      });
+    }
+
+    // Logout Action
+    if (btnHeaderLogout) {
+      btnHeaderLogout.addEventListener('click', () => {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+        updateHeaderAuthState();
+        showToast('👋 로그아웃되었습니다.');
+      });
+    }
+
+    // Social Quick Login Mockups
+    const btnGoogle = document.getElementById('btn-social-google');
+    const btnGithub = document.getElementById('btn-social-github');
+    if (btnGoogle) {
+      btnGoogle.addEventListener('click', () => {
+        const user = { email: 'creator.google@gmail.com', nickname: 'GoogleCreator', plan: 'PRO 👑' };
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+        updateHeaderAuthState();
+        closeAuthModal();
+        showToast('✨ Google 계정으로 간편 로그인되었습니다.');
+      });
+    }
+    if (btnGithub) {
+      btnGithub.addEventListener('click', () => {
+        const user = { email: 'seobukisul@github.com', nickname: 'seobukisul', plan: 'PRO 👑' };
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+        updateHeaderAuthState();
+        closeAuthModal();
+        showToast('✨ GitHub 계정으로 간편 로그인되었습니다.');
+      });
+    }
+
+    updateHeaderAuthState();
+
+    // =========================================================================
+    // 12. Community & Notice Board System (LocalStorage Persistence & Modals)
+    // =========================================================================
+    const BOARD_STORAGE_KEY = 'jent_studio_board_posts';
+
+    const defaultPosts = [
+      {
+        id: 'notice-1',
+        category: 'notice',
+        catName: '📌 공지사항',
+        title: '👑 JENT STUDIO PRO v2.6.0 정식 런칭 안내 및 얼리버드 100명 한정 특가',
+        author: 'JENT STUDIO 공식',
+        date: '2026-10-28',
+        views: 1428,
+        content: '안녕하세요, Suno AI 크리에이터 여러분!\n\nJENT STUDIO PRO v2.6.0이 마침내 공개 준비를 마쳤습니다.\n\n이번 PRO 에디션의 주요 핵심 기능:\n1. 1.5초 무음 병렬 다운로드 (10곡을 단 10초 만에 3대 포맷으로 메모리 직접 추출)\n2. Pick ME 스튜디오 마스터링 (-14.0 LUFS EBU R128 글로벌 표준 음압 정규화 & True-Peak -1.0 dBTP 리미터)\n3. 정규 메타데이터 & 초고화질 커버아트 자동 각인 (ID3v2.3, iTunes Atoms)\n4. 0-Gap 무음 트리밍 플레이리스트 일괄 병합 & 유튜브 챕터 텍스트 자동 생성\n5. 미친감성 4대 작사 수학 공식 + Gemini AI 실시간 작사기\n\n선착순 100분께 40% 할인된 ₩29,000 평생 소장 라이선스를 제공하오니 많은 성원 부탁드립니다!'
+      },
+      {
+        id: 'notice-2',
+        category: 'notice',
+        catName: '🎛️ 마스터링',
+        title: 'Pick ME 원클릭 마스터링(-14.0 LUFS) 유튜브 및 스포티파이 음원 제출 규격 가이드',
+        author: '사운드 마스터',
+        date: '2026-10-27',
+        views: 892,
+        content: 'Suno AI 원곡을 유튜브나 멜론, 스포티파이에 올릴 때 가장 중요한 음압 규격 안내입니다.\n\n유튜브와 스트리밍 플랫폼은 통합 음압(Integrated LUFS)이 -14.0 LUFS를 초과할 경우 음질을 강제로 감쇄(Loudness Penalty)시킵니다. 또한 인터샘플 피크가 0 dBFS를 넘으면 저가 이어폰이나 스마트폰 스피커에서 찌직거리는 클리핑 노이즈가 발생합니다.\n\nJENT STUDIO PRO의 Pick ME 마스터링 옵션을 켜두시면:\n- 자동으로 정확히 -14.0 LUFS로 정규화됩니다.\n- True-Peak 리미터가 -1.0 dBTP에서 디지털 피크를 완벽히 커팅합니다.\n- Mid/Side 스테레오 이미저가 110%~140% 확장되어 웅장한 공간감을 형성합니다.'
+      },
+      {
+        id: 'post-3',
+        category: 'changelog',
+        catName: '🚀 릴리즈 노트',
+        title: 'v2.6.0 릴리즈 체인지로그: M4A 지원 및 LameJS Web Worker 멀티스레드 가속',
+        author: '개발팀 자비스',
+        date: '2026-10-28',
+        views: 654,
+        content: 'v2.6.0 주요 개선 내역:\n- 순정 AAC 스트림을 재인코딩 없이 0.3초 만에 QuickTime Atom으로 직접 패키징하는 초고속 M4A 엔진 탑재\n- 320k MP3 변환 작업을 백그라운드 Web Worker로 분리하여 메인 브라우저 UI 랙 0% 및 60 FPS 유지\n- 홈페이지 최신 버전 자동 감지 알림창 및 원클릭 자동 업데이트 파이프라인 연동'
+      },
+      {
+        id: 'post-4',
+        category: 'tips',
+        catName: '💡 꿀팁',
+        title: '0-Gap 무음 제거 플레이리스트 병합으로 1시간 수면음악 유튜브 채널 만드는 법',
+        author: 'Lo-Fi 큐레이터',
+        date: '2026-10-26',
+        views: 1105,
+        content: '유튜브 BGM 채널을 운영하시는 분들께 드리는 꿀팁입니다!\n\n1. Suno에서 편안한 Lo-Fi 또는 수면 피아노 곡 15~20곡을 생성합니다.\n2. JENT STUDIO PRO SidePanel의 [플레이리스트 병합] 체크박스에 전곡을 체크합니다.\n3. [0-Gap 무음 병합 시작]을 누르면 곡 사이의 어색한 묵음이 0.001초 단위로 자동 삭제되고 5ms 크로스페이드로 매끄럽게 연결됩니다.\n4. 생성된 _Timestamps.txt 내용을 유튜브 설명란에 그대로 붙여넣으면 챕터 타임라인이 자동으로 완성됩니다!'
+      },
+      {
+        id: 'post-5',
+        category: 'tips',
+        catName: '💡 꿀팁',
+        title: '미친감성 4대 작사 수학 공식(11➔3 음절 급강하)으로 Suno 킬링 훅 뽑아내는 노하우',
+        author: '작사 마스터',
+        date: '2026-10-25',
+        views: 940,
+        content: 'Suno AI가 후렴구에서 웅얼거리거나 맥없이 넘어가는 원인은 음절 수 배분에 있습니다.\n\n- 벌스에서는 7~8자로 철저히 절제하여 보컬 호흡 공간을 마련합니다.\n- 코러스 진입 직전 11자로 서사를 몰아친 뒤, 첫 마디를 3자(예: 끝났어, 떠나가)로 수직 낙하시키면 Suno의 AI 보컬이 그 3음절에서 폭발적인 고음 서스테인을 터뜨립니다!\n\nJENT STUDIO PRO의 [수학 공식 모드]를 켜면 이 공식이 가사에 100% 강제 적용됩니다.'
+      },
+      {
+        id: 'post-6',
+        category: 'qna',
+        catName: '❓ Q&A',
+        title: 'M4A 포맷과 MP3 포맷 중 어떤 것을 선택해야 하나요?',
+        author: '뉴비크리에이터',
+        date: '2026-10-24',
+        views: 430,
+        content: 'Q: M4A와 320k MP3 중 어떤 포맷이 더 좋은가요?\n\n답변:\n- 아이폰, Mac, 아이패드, 애플뮤직을 주로 사용하시거나 저장 공간을 아끼면서 고음질을 원하신다면 순정 AAC 기반 M4A를 추천합니다 (다운로드 속도가 0.3초로 가장 빠릅니다).\n- 윈도우 PC, 구형 차량용 오디오, 범용 동영상 편집기 호환성을 원하신다면 320kbps MP3를 추천합니다.\n- DAW(큐베이스, 로직, 에이블톤)에서 추가 믹싱이나 리믹스를 하실 때는 16-bit 무손실 WAV를 사용하세요!'
+      }
+    ];
+
+    function getBoardPosts() {
+      try {
+        const data = localStorage.getItem(BOARD_STORAGE_KEY);
+        if (data) return JSON.parse(data);
+      } catch (e) {}
+      localStorage.setItem(BOARD_STORAGE_KEY, JSON.stringify(defaultPosts));
+      return defaultPosts;
+    }
+
+    function saveBoardPosts(posts) {
+      localStorage.setItem(BOARD_STORAGE_KEY, JSON.stringify(posts));
+    }
+
+    let activeCategory = 'all';
+    let searchQuery = '';
+
+    function renderBoardPosts() {
+      const tbody = document.getElementById('board-posts-tbody');
+      const emptyState = document.getElementById('board-empty-state');
+      if (!tbody) return;
+
+      const posts = getBoardPosts();
+      const filtered = posts.filter(post => {
+        const matchCat = (activeCategory === 'all') || (post.category === activeCategory);
+        const matchSearch = !searchQuery || 
+          post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          post.author.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchCat && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+
+      if (emptyState) emptyState.style.display = 'none';
+      tbody.innerHTML = filtered.map(post => {
+        return `
+          <tr class="board-row" data-post-id="${post.id}">
+            <td>
+              <span class="post-cat-badge ${post.category}">${post.catName || '일반'}</span>
+            </td>
+            <td>
+              <span class="post-title-link">${post.title}</span>
+            </td>
+            <td>${post.author}</td>
+            <td>${post.date}</td>
+            <td style="text-align: center; color: var(--text-dim); font-family: var(--font-mono);">${post.views || 0}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Category filter tabs
+    document.querySelectorAll('.b-cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.b-cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.dataset.category || 'all';
+        renderBoardPosts();
+      });
+    });
+
+    // Search input
+    const searchInput = document.getElementById('board-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value.trim();
+        renderBoardPosts();
+      });
+    }
+
+    // Post Detail Modal
+    const postDetailModal = document.getElementById('post-detail-modal');
+    const btnClosePostModal = document.getElementById('btn-close-post-modal');
+    const btnConfirmPostView = document.getElementById('btn-confirm-post-view');
+
+    function openPostDetail(postId) {
+      const posts = getBoardPosts();
+      const post = posts.find(p => p.id === postId);
+      if (!post || !postDetailModal) return;
+
+      // Increment views
+      post.views = (post.views || 0) + 1;
+      saveBoardPosts(posts);
+      renderBoardPosts();
+
+      document.getElementById('post-view-category').textContent = post.catName || '공지사항';
+      document.getElementById('post-view-title').textContent = post.title;
+      document.getElementById('post-view-author').textContent = `작성자: ${post.author}`;
+      document.getElementById('post-view-date').textContent = post.date;
+      document.getElementById('post-view-views').textContent = `조회수 ${post.views}`;
+      document.getElementById('post-view-body').textContent = post.content;
+
+      postDetailModal.style.display = 'flex';
+    }
+
+    function closePostDetail() {
+      if (postDetailModal) postDetailModal.style.display = 'none';
+    }
+
+    if (btnClosePostModal) btnClosePostModal.addEventListener('click', closePostDetail);
+    if (btnConfirmPostView) btnConfirmPostView.addEventListener('click', closePostDetail);
+
+    // Click on board rows or pinned notices
+    document.addEventListener('click', (e) => {
+      const row = e.target.closest('.board-row, .pinned-card');
+      if (row && row.dataset.postId) {
+        openPostDetail(row.dataset.postId);
+      }
+    });
+
+    // Write Modal
+    const writeModal = document.getElementById('write-modal');
+    const btnOpenWriteModal = document.getElementById('btn-open-write-modal');
+    const btnCloseWriteModal = document.getElementById('btn-close-write-modal');
+    const btnCancelWrite = document.getElementById('btn-cancel-write');
+    const formWritePost = document.getElementById('form-write-post');
+
+    if (btnOpenWriteModal) {
+      btnOpenWriteModal.addEventListener('click', () => {
+        const user = getStoredUser();
+        const authorInput = document.getElementById('write-author');
+        if (authorInput && user) {
+          authorInput.value = user.nickname || user.email.split('@')[0];
+        }
+        if (writeModal) writeModal.style.display = 'flex';
+      });
+    }
+
+    function closeWriteModal() {
+      if (writeModal) writeModal.style.display = 'none';
+    }
+
+    if (btnCloseWriteModal) btnCloseWriteModal.addEventListener('click', closeWriteModal);
+    if (btnCancelWrite) btnCancelWrite.addEventListener('click', closeWriteModal);
+
+    if (formWritePost) {
+      formWritePost.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const cat = document.getElementById('write-category').value;
+        const author = document.getElementById('write-author').value.trim();
+        const title = document.getElementById('write-title').value.trim();
+        const content = document.getElementById('write-content').value.trim();
+
+        const catMap = {
+          qna: '❓ 질문 & Q&A',
+          tips: '💡 크리에이터 꿀팁',
+          feedback: '💬 피드백'
+        };
+
+        const newPost = {
+          id: `post-${Date.now()}`,
+          category: cat,
+          catName: catMap[cat] || '일반',
+          title,
+          author,
+          date: new Date().toISOString().slice(0, 10),
+          views: 1,
+          content
+        };
+
+        const posts = getBoardPosts();
+        posts.unshift(newPost);
+        saveBoardPosts(posts);
+
+        formWritePost.reset();
+        closeWriteModal();
+        renderBoardPosts();
+        showToast('🎉 게시글이 성공적으로 등록되었습니다!');
+      });
+    }
+
+    renderBoardPosts();
+
+    // Query parameter preview helpers for modals (single run)
+    if (window.location.search.includes('modal=auth')) {
+      setTimeout(() => openAuthModal('login'), 200);
+    } else if (window.location.search.includes('modal=signup')) {
+      setTimeout(() => openAuthModal('signup'), 200);
+    } else if (window.location.search.includes('modal=post')) {
+      setTimeout(() => openPostDetail('notice-1'), 200);
+    }
+
+    // Pricing Plan CTAs
+    const btnPlanEarlybird = document.getElementById('btn-plan-earlybird');
+    const btnPlanMonthly = document.getElementById('btn-plan-monthly');
+
+    if (btnPlanEarlybird) {
+      btnPlanEarlybird.addEventListener('click', () => {
+        const user = getStoredUser();
+        if (!user) {
+          openAuthModal('signup');
+          showToast('🔑 얼리버드 예약은 회원가입/로그인 후 진행하실 수 있습니다.');
+        } else {
+          showToast(`👑 ${user.nickname}님! PRO 얼리버드 평생 소장 라이선스(₩29,000) 사전 등록이 완료되었습니다. 결제 오픈 시 알림을 보내드립니다.`);
+        }
+      });
+    }
+
+    if (btnPlanMonthly) {
+      btnPlanMonthly.addEventListener('click', () => {
+        const user = getStoredUser();
+        if (!user) {
+          openAuthModal('signup');
+          showToast('🔑 정기 구독 신청은 회원가입/로그인 후 진행하실 수 있습니다.');
+        } else {
+          showToast(`👑 ${user.nickname}님! PRO 월간 구독(₩6,900) 사전 예약이 접수되었습니다.`);
+        }
+      });
+    }
   });
 
   function updatePlayerBarMetadata(track) {
