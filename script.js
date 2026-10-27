@@ -407,7 +407,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${title} - june (Suno Pure Audio).${ext}`;
+      a.download = `${title} - june (JENT STUDIO Basic).${ext}`;
       document.body.appendChild(a);
       a.click();
       setTimeout(() => {
@@ -547,7 +547,7 @@
     const btnDlZip = document.getElementById('btn-download-zip');
     if (btnDlZip) {
       btnDlZip.addEventListener('click', () => {
-        showToast('📦 Suno Pure Audio Studio Capture (v1.9.0.zip) 다운로드를 시작합니다!');
+        showToast('📦 JENT STUDIO 기본 (v1.9.0.zip) 다운로드를 시작합니다!');
       });
     }
 
@@ -556,18 +556,18 @@
     if (btnProSoon) {
       btnProSoon.addEventListener('click', (e) => {
         e.preventDefault();
-        showToast('👑 JENT STUDIO PRO v2.6.0은 현재 최종 빌드 검증 및 결제 시스템 연동 중입니다. 곧 정식 출시됩니다!');
+        showToast('👑 JENT STUDIO 프로(v2.6.0)는 현재 데모 프리젠테이션 공개 준비 중입니다. 곧 정식 오픈됩니다!');
       });
     }
 
     // =========================================================================
-    // 10. Multi-View Page Switcher (PRO / Free / Board / Pricing / Download)
+    // 10. Multi-View Page Switcher (PRO / Free / Board / Download)
     // =========================================================================
     const viewMap = {
       '#pro': 'view-pro',
       '#free': 'view-free',
       '#board': 'view-board',
-      '#pricing': 'view-pricing',
+      '#pricing': 'view-pro',
       '#download': 'view-download'
     };
 
@@ -744,13 +744,13 @@
         const user = {
           email,
           nickname,
-          plan: 'PRO 얼리버드 👑',
+          plan: 'PRO 크리에이터 👑',
           joinedAt: new Date().toISOString()
         };
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
         updateHeaderAuthState();
         closeAuthModal();
-        showToast(`✨ 회원가입을 축하합니다, ${nickname}님! PRO 혜택이 적용되었습니다.`);
+        showToast(`✨ 환영합니다, ${nickname}님! JENT STUDIO 회원 인증이 완료되었습니다.`);
       });
     }
 
@@ -797,11 +797,11 @@
         id: 'notice-1',
         category: 'notice',
         catName: '📌 공지사항',
-        title: '👑 JENT STUDIO PRO v2.6.0 정식 런칭 안내 및 얼리버드 100명 한정 특가',
+        title: '👑 JENT STUDIO 프로(v2.6.0) 신기능 공개 및 데모 프리젠테이션 안내',
         author: 'JENT STUDIO 공식',
         date: '2026-10-28',
         views: 1428,
-        content: '안녕하세요, Suno AI 크리에이터 여러분!\n\nJENT STUDIO PRO v2.6.0이 마침내 공개 준비를 마쳤습니다.\n\n이번 PRO 에디션의 주요 핵심 기능:\n1. 1.5초 무음 병렬 다운로드 (10곡을 단 10초 만에 3대 포맷으로 메모리 직접 추출)\n2. 스튜디오 원클릭 마스터링 (-14.0 LUFS EBU R128 글로벌 표준 음압 정규화 & True-Peak -1.0 dBTP 리미터)\n3. 정규 메타데이터 & 초고화질 커버아트 자동 각인 (ID3v2.3, iTunes Atoms)\n4. 0-Gap 무음 트리밍 플레이리스트 일괄 병합 & 유튜브 챕터 텍스트 자동 생성\n5. 프로 작사 알고리즘 + Gemini AI 실시간 작사기\n\n선착순 100분께 40% 할인된 ₩29,000 평생 소장 라이선스를 제공하오니 많은 성원 부탁드립니다!'
+        content: '안녕하세요, Suno AI 크리에이터 여러분!\n\nJENT STUDIO 프로(v2.6.0)가 마침내 공개 준비를 마쳤습니다.\n\n이번 프로 에디션의 주요 핵심 기능:\n1. 1.5초 무음 병렬 다운로드 (10곡을 단 10초 만에 3대 포맷으로 메모리 직접 추출)\n2. 스튜디오 원클릭 마스터링 (-14.0 LUFS EBU R128 글로벌 표준 음압 정규화 & True-Peak -1.0 dBTP 리미터)\n3. 정규 메타데이터 & 초고화질 커버아트 자동 각인 (ID3v2.3, iTunes Atoms)\n4. 0-Gap 무음 트리밍 플레이리스트 일괄 병합 & 유튜브 챕터 텍스트 자동 생성\n5. 프로 작사 알고리즘 + 최신 AI 연결 실시간 작사기\n\n이번 주 진행되는 사용자 대상 데모 프리젠테이션에서 전격 시연됩니다. 크리에이터 여러분의 많은 성원 부탁드립니다!'
       },
       {
         id: 'notice-2',
@@ -1039,34 +1039,6 @@
       setTimeout(() => openAuthModal('signup'), 200);
     } else if (window.location.search.includes('modal=post')) {
       setTimeout(() => openPostDetail('notice-1'), 200);
-    }
-
-    // Pricing Plan CTAs
-    const btnPlanEarlybird = document.getElementById('btn-plan-earlybird');
-    const btnPlanMonthly = document.getElementById('btn-plan-monthly');
-
-    if (btnPlanEarlybird) {
-      btnPlanEarlybird.addEventListener('click', () => {
-        const user = getStoredUser();
-        if (!user) {
-          openAuthModal('signup');
-          showToast('🔑 얼리버드 예약은 회원가입/로그인 후 진행하실 수 있습니다.');
-        } else {
-          showToast(`👑 ${user.nickname}님! PRO 얼리버드 평생 소장 라이선스(₩29,000) 사전 등록이 완료되었습니다. 결제 오픈 시 알림을 보내드립니다.`);
-        }
-      });
-    }
-
-    if (btnPlanMonthly) {
-      btnPlanMonthly.addEventListener('click', () => {
-        const user = getStoredUser();
-        if (!user) {
-          openAuthModal('signup');
-          showToast('🔑 정기 구독 신청은 회원가입/로그인 후 진행하실 수 있습니다.');
-        } else {
-          showToast(`👑 ${user.nickname}님! PRO 월간 구독(₩6,900) 사전 예약이 접수되었습니다.`);
-        }
-      });
     }
   });
 

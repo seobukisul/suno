@@ -10,7 +10,7 @@
     "🎛️ 스튜디오급 원클릭 마스터링 (-14.0 LUFS & True-Peak 리미터 일괄 보정)",
     "🏷️ 글로벌 정규 메타데이터 & 고화질 앨범 커버 자동 태깅 (ID3v2.3 & iTunes Atoms)",
     "🧩 0-Gap 무손실 플레이리스트 일괄 병합 & YouTube 타임스탬프 챕터 자동 생성",
-    "✍️ 프로 작사 알고리즘 + Gemini AI 실시간 가사·스타일 자동 채우기",
+    "✍️ 프로 작사 알고리즘 + 최신 AI 연결 실시간 가사·스타일 자동 채우기",
     "⚙️ LameJS Web Worker 백그라운드 인코딩으로 UI 랙 0% 달성"
   ],
   "downloadUrl": "https://sunodown.vercel.app/suno-audio-capture-extension-v1.9.0.zip",
