@@ -19,7 +19,7 @@
     }
 
     // Update CSS variables on 3D tilt cards for localized spotlight
-    document.querySelectorAll('.feature-card, .studio-mockup-wrapper, .step-card, .download-master-card').forEach(card => {
+    document.querySelectorAll('.feature-card, .studio-mockup-wrapper, .step-card, .download-master-card, .pro-card').forEach(card => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -29,7 +29,7 @@
   });
 
   // 3D Tilt Effect on Feature Cards and Mockup Window
-  const tiltElements = document.querySelectorAll('.feature-card, .studio-mockup-wrapper, .step-card');
+  const tiltElements = document.querySelectorAll('.feature-card, .studio-mockup-wrapper, .step-card, .pro-card');
   tiltElements.forEach(el => {
     el.addEventListener('mousemove', (e) => {
       const rect = el.getBoundingClientRect();
@@ -92,7 +92,7 @@
   }, { passive: true });
 
   // Scroll Reveal via IntersectionObserver
-  const revealElements = document.querySelectorAll('.feature-card, .step-card, .comp-table, .pipe-step, .download-master-card');
+  const revealElements = document.querySelectorAll('.feature-card, .step-card, .comp-table, .pipe-step, .download-master-card, .pro-card');
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -548,6 +548,15 @@
     if (btnDlZip) {
       btnDlZip.addEventListener('click', () => {
         showToast('📦 Suno Pure Audio Studio Capture (v1.9.0.zip) 다운로드를 시작합니다!');
+      });
+    }
+
+    // 9. PRO Edition Teaser Button (Coming Soon Alert)
+    const btnProSoon = document.getElementById('btn-pro-coming-soon');
+    if (btnProSoon) {
+      btnProSoon.addEventListener('click', (e) => {
+        e.preventDefault();
+        showToast('👑 JENT STUDIO PRO v2.6.0은 현재 최종 빌드 검증 및 결제 시스템 연동 중입니다. 곧 정식 출시됩니다!');
       });
     }
   });
