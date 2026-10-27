@@ -7,7 +7,7 @@
   "bannerUrl": "https://sunodown.vercel.app/images/update_banner.jpg",
   "changelog": [
     "⚡ 1.5초 무음 병렬 다운로드 엔진 탑재 (WAV, 순정 M4A, 320k MP3)",
-    "🎛️ Pick ME 스튜디오급 마스터링 (-14.0 LUFS & True-Peak 리미터 일괄 보정)",
+    "🎛️ 스튜디오급 원클릭 마스터링 (-14.0 LUFS & True-Peak 리미터 일괄 보정)",
     "🏷️ 글로벌 정규 메타데이터 & 고화질 앨범 커버 자동 태깅 (ID3v2.3 & iTunes Atoms)",
     "🧩 0-Gap 무손실 플레이리스트 일괄 병합 & YouTube 타임스탬프 챕터 자동 생성",
     "✍️ 미친감성 4대 작사 수학 공식 + Gemini AI 실시간 가사·스타일 자동 채우기",
