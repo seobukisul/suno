@@ -12,10 +12,10 @@
 
 const SUPABASE_CONFIG = {
   // 주인님의 Supabase 프로젝트 Base URL
-  url: 'https://nrrlovpoawyrdiaalbun.supabase.co',
+  url: 'https://aznvgcmvozkhigervwpu.supabase.co',
 
   // 주인님의 Supabase Publishable Public Key
-  anonKey: 'sb_publishable_-mC-kcM9pMHBznzj3V3c0Q_9F8km3qL',
+  anonKey: 'sb_publishable_K7dBbIXTMf8ttDHnZjEqyw_5jRR_yMf',
 
   // 기본 활성화 플래그 (유효한 키 입력 여부 확인)
   isConfigured: function() {
