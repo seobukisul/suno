@@ -639,7 +639,7 @@
     handleHashRoute();
 
     // =========================================================================
-    // 11. Simple Email Signup & Login System (LocalStorage Persistence)
+    // 11. Supabase Free Cloud Auth & Database Integration
     // =========================================================================
     const AUTH_STORAGE_KEY = 'jent_auth_user';
     const authModal = document.getElementById('auth-modal');
@@ -692,6 +692,28 @@
       }
     }
 
+    // Supabase Auth State Change Listener
+    const sb = window.getSupabase ? window.getSupabase() : null;
+    if (sb) {
+      sb.auth.onAuthStateChange((event, session) => {
+        if (session && session.user) {
+          const userMeta = session.user.user_metadata || {};
+          const user = {
+            id: session.user.id,
+            email: session.user.email,
+            nickname: userMeta.nickname || session.user.email.split('@')[0],
+            plan: userMeta.plan || 'PRO 👑',
+            source: 'supabase'
+          };
+          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+          updateHeaderAuthState();
+        } else if (event === 'SIGNED_OUT') {
+          localStorage.removeItem(AUTH_STORAGE_KEY);
+          updateHeaderAuthState();
+        }
+      });
+    }
+
     if (btnHeaderLogin) btnHeaderLogin.addEventListener('click', () => openAuthModal('login'));
     if (btnCloseAuthModal) btnCloseAuthModal.addEventListener('click', closeAuthModal);
 
@@ -711,16 +733,56 @@
       });
     }
 
-    // Handle Login Submit
+    // Handle Login Submit (Supabase Cloud Auth + Local Fallback)
     if (formLogin) {
-      formLogin.addEventListener('submit', (e) => {
+      formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+        const submitBtn = formLogin.querySelector('button[type="submit"]');
+
+        const sb = window.getSupabase ? window.getSupabase() : null;
+        if (sb) {
+          try {
+            if (submitBtn) submitBtn.disabled = true;
+            const { data, error } = await sb.auth.signInWithPassword({ email, password });
+            if (error) {
+              if (error.message.includes('Email not confirmed')) {
+                showToast('⚠️ [이메일 미인증] 메일함을 확인하시거나 Supabase 설정에서 Confirm email을 비활성화해주세요.');
+              } else if (error.message.includes('Invalid login credentials')) {
+                showToast('⚠️ 이메일 또는 비밀번호가 올바르지 않습니다.');
+              } else {
+                showToast(`⚠️ 로그인 실패: ${error.message}`);
+              }
+              return;
+            }
+            const userMeta = data.user.user_metadata || {};
+            const user = {
+              id: data.user.id,
+              email: data.user.email,
+              nickname: userMeta.nickname || email.split('@')[0],
+              plan: userMeta.plan || 'PRO 👑',
+              source: 'supabase'
+            };
+            localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+            updateHeaderAuthState();
+            closeAuthModal();
+            showToast(`🎉 환영합니다, ${user.nickname}님! Supabase 클라우드 로그인되었습니다.`);
+            return;
+          } catch (err) {
+            console.error('Supabase Login error, fallback to local:', err);
+          } finally {
+            if (submitBtn) submitBtn.disabled = false;
+          }
+        }
+
+        // Fallback: LocalStorage
         const user = {
           email,
           nickname: email.split('@')[0],
           plan: 'PRO 👑',
-          loggedInAt: new Date().toISOString()
+          loggedInAt: new Date().toISOString(),
+          source: 'local'
         };
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
         updateHeaderAuthState();
@@ -729,25 +791,72 @@
       });
     }
 
-    // Handle Signup Submit
+    // Handle Signup Submit (Supabase Cloud Auth + Local Fallback)
     if (formSignup) {
-      formSignup.addEventListener('submit', (e) => {
+      formSignup.addEventListener('submit', async (e) => {
         e.preventDefault();
         const nickname = document.getElementById('signup-nickname').value.trim();
         const email = document.getElementById('signup-email').value.trim();
         const pw = document.getElementById('signup-password').value;
         const pwConfirm = document.getElementById('signup-password-confirm').value;
+        const submitBtn = formSignup.querySelector('button[type="submit"]');
 
         if (pw !== pwConfirm) {
           showToast('⚠️ 비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
           return;
         }
 
+        const sb = window.getSupabase ? window.getSupabase() : null;
+        if (sb) {
+          try {
+            if (submitBtn) submitBtn.disabled = true;
+            const { data, error } = await sb.auth.signUp({
+              email,
+              password: pw,
+              options: {
+                data: {
+                  nickname,
+                  plan: 'PRO 크리에이터 👑'
+                }
+              }
+            });
+
+            if (error) {
+              showToast(`⚠️ 회원가입 실패: ${error.message}`);
+              return;
+            }
+
+            if (data.user && !data.session) {
+              showToast('📧 가입 완료! 인증 이메일이 발송되었습니다. (즉시 로그인은 Supabase 설정 필요)');
+            } else {
+              const user = {
+                id: data.user.id,
+                email,
+                nickname,
+                plan: 'PRO 크리에이터 👑',
+                joinedAt: new Date().toISOString(),
+                source: 'supabase'
+              };
+              localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+              updateHeaderAuthState();
+              showToast(`✨ 환영합니다, ${nickname}님! Supabase 회원 등록이 완료되었습니다.`);
+            }
+            closeAuthModal();
+            return;
+          } catch (err) {
+            console.error('Supabase Signup error, fallback to local:', err);
+          } finally {
+            if (submitBtn) submitBtn.disabled = false;
+          }
+        }
+
+        // Fallback: LocalStorage
         const user = {
           email,
           nickname,
           plan: 'PRO 크리에이터 👑',
-          joinedAt: new Date().toISOString()
+          joinedAt: new Date().toISOString(),
+          source: 'local'
         };
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
         updateHeaderAuthState();
@@ -758,19 +867,38 @@
 
     // Logout Action
     if (btnHeaderLogout) {
-      btnHeaderLogout.addEventListener('click', () => {
+      btnHeaderLogout.addEventListener('click', async () => {
+        const sb = window.getSupabase ? window.getSupabase() : null;
+        if (sb) {
+          try {
+            await sb.auth.signOut();
+          } catch (e) {}
+        }
         localStorage.removeItem(AUTH_STORAGE_KEY);
         updateHeaderAuthState();
         showToast('👋 로그아웃되었습니다.');
       });
     }
 
-    // Social Quick Login Mockups
+    // Social Quick Login (OAuth / Mock Fallback)
     const btnGoogle = document.getElementById('btn-social-google');
     const btnGithub = document.getElementById('btn-social-github');
     if (btnGoogle) {
-      btnGoogle.addEventListener('click', () => {
-        const user = { email: 'creator.google@gmail.com', nickname: 'GoogleCreator', plan: 'PRO 👑' };
+      btnGoogle.addEventListener('click', async () => {
+        const sb = window.getSupabase ? window.getSupabase() : null;
+        if (sb) {
+          try {
+            const { error } = await sb.auth.signInWithOAuth({
+              provider: 'google',
+              options: { redirectTo: window.location.origin }
+            });
+            if (error) throw error;
+            return;
+          } catch (err) {
+            console.warn('Supabase Google OAuth not configured, fallback:', err);
+          }
+        }
+        const user = { email: 'creator.google@gmail.com', nickname: 'GoogleCreator', plan: 'PRO 👑', source: 'local' };
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
         updateHeaderAuthState();
         closeAuthModal();
@@ -778,8 +906,21 @@
       });
     }
     if (btnGithub) {
-      btnGithub.addEventListener('click', () => {
-        const user = { email: 'seobukisul@github.com', nickname: 'seobukisul', plan: 'PRO 👑' };
+      btnGithub.addEventListener('click', async () => {
+        const sb = window.getSupabase ? window.getSupabase() : null;
+        if (sb) {
+          try {
+            const { error } = await sb.auth.signInWithOAuth({
+              provider: 'github',
+              options: { redirectTo: window.location.origin }
+            });
+            if (error) throw error;
+            return;
+          } catch (err) {
+            console.warn('Supabase GitHub OAuth not configured, fallback:', err);
+          }
+        }
+        const user = { email: 'seobukisul@github.com', nickname: 'seobukisul', plan: 'PRO 👑', source: 'local' };
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
         updateHeaderAuthState();
         closeAuthModal();
@@ -790,7 +931,7 @@
     updateHeaderAuthState();
 
     // =========================================================================
-    // 12. Community & Notice Board System (LocalStorage Persistence & Modals)
+    // 12. Community & Notice Board System (Supabase PostgreSQL + Fallback)
     // =========================================================================
     const BOARD_STORAGE_KEY = 'jent_studio_board_posts';
 
@@ -857,7 +998,51 @@
       }
     ];
 
-    function getBoardPosts() {
+    let cloudPostsCache = null;
+
+    // Supabase Cloud Posts Fetch
+    async function fetchCloudPosts() {
+      const sb = window.getSupabase ? window.getSupabase() : null;
+      if (!sb) return null;
+      try {
+        const { data, error } = await sb
+          .from('posts')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.warn('⚠️ [Supabase DB] posts 테이블 조회 실패 (RLS 정책 또는 테이블 확인 필요):', error);
+          return null;
+        }
+
+        if (data && data.length > 0) {
+          const catMap = {
+            notice: '📌 공지사항',
+            changelog: '🚀 릴리즈 노트',
+            tips: '💡 꿀팁',
+            qna: '❓ 질문 & Q&A',
+            feedback: '💬 피드백'
+          };
+          cloudPostsCache = data.map(p => ({
+            id: String(p.id),
+            category: p.category || 'qna',
+            catName: p.cat_name || catMap[p.category] || '일반',
+            title: p.title || '제목 없음',
+            author: p.author || '익명 크리에이터',
+            date: p.created_at ? p.created_at.slice(0, 10) : new Date().toISOString().slice(0, 10),
+            views: p.views || 0,
+            content: p.content || ''
+          }));
+          return cloudPostsCache;
+        }
+        return [];
+      } catch (e) {
+        console.warn('Supabase fetch exception:', e);
+        return null;
+      }
+    }
+
+    function getLocalBoardPosts() {
       try {
         const data = localStorage.getItem(BOARD_STORAGE_KEY);
         if (data) return JSON.parse(data);
@@ -866,17 +1051,32 @@
       return defaultPosts;
     }
 
-    function saveBoardPosts(posts) {
+    function saveLocalBoardPosts(posts) {
       localStorage.setItem(BOARD_STORAGE_KEY, JSON.stringify(posts));
+    }
+
+    function getBoardPosts() {
+      if (cloudPostsCache !== null && cloudPostsCache.length > 0) {
+        return cloudPostsCache;
+      }
+      return getLocalBoardPosts();
     }
 
     let activeCategory = 'all';
     let searchQuery = '';
 
-    function renderBoardPosts() {
+    async function renderBoardPosts() {
       const tbody = document.getElementById('board-posts-tbody');
       const emptyState = document.getElementById('board-empty-state');
       if (!tbody) return;
+
+      // Supabase 클라우드에서 최신 글 로드 시도
+      if (cloudPostsCache === null && window.getSupabase && window.getSupabase()) {
+        const cloudPosts = await fetchCloudPosts();
+        if (cloudPosts !== null) {
+          cloudPostsCache = cloudPosts;
+        }
+      }
 
       const posts = getBoardPosts();
       const filtered = posts.filter(post => {
@@ -936,14 +1136,22 @@
     const btnClosePostModal = document.getElementById('btn-close-post-modal');
     const btnConfirmPostView = document.getElementById('btn-confirm-post-view');
 
-    function openPostDetail(postId) {
+    async function openPostDetail(postId) {
       const posts = getBoardPosts();
       const post = posts.find(p => p.id === postId);
       if (!post || !postDetailModal) return;
 
       // Increment views
       post.views = (post.views || 0) + 1;
-      saveBoardPosts(posts);
+      
+      const sb = window.getSupabase ? window.getSupabase() : null;
+      if (sb && post.id && !post.id.startsWith('notice-') && !post.id.startsWith('post-')) {
+        try {
+          sb.from('posts').update({ views: post.views }).eq('id', post.id).then();
+        } catch (e) {}
+      }
+
+      saveLocalBoardPosts(posts);
       renderBoardPosts();
 
       document.getElementById('post-view-category').textContent = post.catName || '공지사항';
@@ -997,12 +1205,13 @@
     if (btnCancelWrite) btnCancelWrite.addEventListener('click', closeWriteModal);
 
     if (formWritePost) {
-      formWritePost.addEventListener('submit', (e) => {
+      formWritePost.addEventListener('submit', async (e) => {
         e.preventDefault();
         const cat = document.getElementById('write-category').value;
         const author = document.getElementById('write-author').value.trim();
         const title = document.getElementById('write-title').value.trim();
         const content = document.getElementById('write-content').value.trim();
+        const submitBtn = formWritePost.querySelector('button[type="submit"]');
 
         const catMap = {
           qna: '❓ 질문 & Q&A',
@@ -1010,25 +1219,68 @@
           feedback: '💬 피드백'
         };
 
-        const newPost = {
-          id: `post-${Date.now()}`,
-          category: cat,
-          catName: catMap[cat] || '일반',
-          title,
-          author,
-          date: new Date().toISOString().slice(0, 10),
-          views: 1,
-          content
-        };
+        const sb = window.getSupabase ? window.getSupabase() : null;
+        let cloudSaved = false;
 
-        const posts = getBoardPosts();
-        posts.unshift(newPost);
-        saveBoardPosts(posts);
+        if (sb) {
+          try {
+            if (submitBtn) submitBtn.disabled = true;
+            const user = getStoredUser();
+            const { data, error } = await sb.from('posts').insert([{
+              category: cat,
+              cat_name: catMap[cat] || '일반',
+              title,
+              author,
+              content,
+              views: 1,
+              user_id: user?.id || null
+            }]).select();
+
+            if (error) {
+              console.warn('Supabase post insert error (Check RLS policy):', error);
+              showToast(`⚠️ 클라우드 DB 저장 경고: ${error.message} (로컬 캐시에 저장합니다)`);
+            } else if (data && data[0]) {
+              cloudSaved = true;
+              if (cloudPostsCache) {
+                cloudPostsCache.unshift({
+                  id: String(data[0].id),
+                  category: cat,
+                  catName: catMap[cat] || '일반',
+                  title,
+                  author,
+                  date: new Date().toISOString().slice(0, 10),
+                  views: 1,
+                  content
+                });
+              }
+            }
+          } catch (err) {
+            console.error('Supabase write exception:', err);
+          } finally {
+            if (submitBtn) submitBtn.disabled = false;
+          }
+        }
+
+        if (!cloudSaved) {
+          const newPost = {
+            id: `post-${Date.now()}`,
+            category: cat,
+            catName: catMap[cat] || '일반',
+            title,
+            author,
+            date: new Date().toISOString().slice(0, 10),
+            views: 1,
+            content
+          };
+          const posts = getLocalBoardPosts();
+          posts.unshift(newPost);
+          saveLocalBoardPosts(posts);
+        }
 
         formWritePost.reset();
         closeWriteModal();
         renderBoardPosts();
-        showToast('🎉 게시글이 성공적으로 등록되었습니다!');
+        showToast(cloudSaved ? '🎉 Supabase 클라우드 DB에 게시글이 등록되었습니다!' : '🎉 게시글이 성공적으로 등록되었습니다!');
       });
     }
 
