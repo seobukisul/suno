@@ -11,11 +11,11 @@
  */
 
 const SUPABASE_CONFIG = {
-  // 주인님의 Supabase 프로젝트 URL (예: https://abcdefghijklm.supabase.co)
-  url: window.__ENV_SUPABASE_URL || 'https://YOUR_PROJECT_ID.supabase.co',
+  // 주인님의 Supabase 프로젝트 Base URL
+  url: 'https://nrrlovpoawyrdiaalbun.supabase.co',
 
-  // 주인님의 Supabase anon public key (브라우저 공개용 안전 키)
-  anonKey: window.__ENV_SUPABASE_ANON_KEY || 'YOUR_ANON_KEY',
+  // 주인님의 Supabase Publishable Public Key
+  anonKey: 'sb_publishable_-mC-kcM9pMHBznzj3V3c0Q_9F8km3qL',
 
   // 기본 활성화 플래그 (유효한 키 입력 여부 확인)
   isConfigured: function() {
@@ -26,14 +26,26 @@ const SUPABASE_CONFIG = {
   }
 };
 
+// URL 정규화 헬퍼 (뒤에 /rest/v1 등이 붙어 있어도 안전하게 기본 origin 추출)
+function sanitizeSupabaseUrl(rawUrl) {
+  if (!rawUrl) return '';
+  try {
+    const parsed = new URL(rawUrl);
+    return `${parsed.protocol}//${parsed.host}`;
+  } catch (e) {
+    return rawUrl.replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
+  }
+}
+
 // Supabase Client Instance (SDK 로드 시 생성)
 let supabaseClient = null;
 
 function initSupabase() {
   if (typeof window.supabase !== 'undefined' && SUPABASE_CONFIG.isConfigured()) {
     try {
-      supabaseClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-      console.log('✅ [JENT STUDIO] Supabase 클라우드 DB & Auth 연동 완료');
+      const cleanUrl = sanitizeSupabaseUrl(SUPABASE_CONFIG.url);
+      supabaseClient = window.supabase.createClient(cleanUrl, SUPABASE_CONFIG.anonKey);
+      console.log('✅ [JENT STUDIO] Supabase 클라우드 DB & Auth 연동 완료:', cleanUrl);
       return supabaseClient;
     } catch (err) {
       console.warn('⚠️ [JENT STUDIO] Supabase 초기화 실패, 로컬 모드로 동작합니다:', err);
