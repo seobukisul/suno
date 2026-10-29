@@ -79,19 +79,9 @@ body {
   overflow-x: hidden;
 }
 
-/* Background Subtle Studio Grid */
+/* Background Subtle Studio Grid - 세로줄 방지를 위해 비활성화 */
 .bg-grid-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  background-size: 50px 50px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
-  z-index: 0;
+  display: none !important;
 }
 
 /* Scroll Progress Bar at Very Top */
@@ -1915,6 +1905,8 @@ body {
   padding: 14px 18px;
   text-align: left;
   border-bottom: 1px solid var(--border-subtle);
+  border-left: none !important;
+  border-right: none !important;
 }
 
 .comp-table th {
@@ -1922,6 +1914,8 @@ body {
   font-size: 13.5px;
   font-weight: 800;
   color: var(--text-muted);
+  border-left: none !important;
+  border-right: none !important;
 }
 
 .comp-table th.col-free {
@@ -1930,7 +1924,8 @@ body {
 
 .comp-table th.col-pro {
   color: #FBBF24;
-  background: rgba(245, 158, 11, 0.08);
+  border-left: none !important;
+  border-right: none !important;
 }
 
 .comp-table tbody tr:hover {
@@ -1938,7 +1933,8 @@ body {
 }
 
 .comp-table td:nth-child(3) {
-  background: rgba(245, 158, 11, 0.04);
+  border-left: none !important;
+  border-right: none !important;
 }
 
 .comp-check {
@@ -3170,13 +3166,15 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   overflow-x: auto;
+  overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
   margin-bottom: 40px;
 }
 
 .col-pro-cell {
-  background: rgba(245, 158, 11, 0.05);
+  border-left: none !important;
+  border-right: none !important;
 }
 
 .pro-cta-banner-bottom {
