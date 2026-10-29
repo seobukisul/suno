@@ -880,51 +880,69 @@
       });
     }
 
-    // Social Quick Login (OAuth / Mock Fallback)
+    // Provider Active Check Helper (OAuth 활성화 여부 사전 검증으로 400 에러 페이지 튕김 방지)
+    async function isOAuthProviderActive(providerName) {
+      if (!window.SUPABASE_CONFIG || !window.SUPABASE_CONFIG.isConfigured()) return false;
+      try {
+        const cleanUrl = sanitizeSupabaseUrl(window.SUPABASE_CONFIG.url);
+        const res = await fetch(`${cleanUrl}/auth/v1/settings`, {
+          headers: { apikey: window.SUPABASE_CONFIG.anonKey }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          return !!(data?.external && data.external[providerName]);
+        }
+      } catch (e) {}
+      return false;
+    }
+
+    // Social Quick Login (OAuth / Protective Guidance)
     const btnGoogle = document.getElementById('btn-social-google');
     const btnGithub = document.getElementById('btn-social-github');
     if (btnGoogle) {
       btnGoogle.addEventListener('click', async () => {
         const sb = window.getSupabase ? window.getSupabase() : null;
         if (sb) {
+          const isGoogleActive = await isOAuthProviderActive('google');
+          if (!isGoogleActive) {
+            showToast('⚠️ Google 로그인은 Supabase 대시보드에서 Google Client ID 등록이 필요합니다. 상단의 [이메일 가입/로그인]을 이용해 주세요!');
+            tabAuthSignup?.click();
+            return;
+          }
           try {
-            const { error } = await sb.auth.signInWithOAuth({
+            await sb.auth.signInWithOAuth({
               provider: 'google',
               options: { redirectTo: window.location.origin }
             });
-            if (error) throw error;
             return;
           } catch (err) {
-            console.warn('Supabase Google OAuth not configured, fallback:', err);
+            console.warn('Supabase Google OAuth error:', err);
           }
         }
-        const user = { email: 'creator.google@gmail.com', nickname: 'GoogleCreator', plan: 'PRO 👑', source: 'local' };
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
-        updateHeaderAuthState();
-        closeAuthModal();
-        showToast('✨ Google 계정으로 간편 로그인되었습니다.');
+        showToast('ℹ️ 상단의 [이메일 주소/비밀번호]로 간편 가입 및 로그인을 이용해 주세요.');
       });
     }
     if (btnGithub) {
       btnGithub.addEventListener('click', async () => {
         const sb = window.getSupabase ? window.getSupabase() : null;
         if (sb) {
+          const isGithubActive = await isOAuthProviderActive('github');
+          if (!isGithubActive) {
+            showToast('⚠️ GitHub 로그인은 Supabase 대시보드에서 GitHub OAuth 앱 등록이 필요합니다. 상단의 [이메일 가입/로그인]을 이용해 주세요!');
+            tabAuthSignup?.click();
+            return;
+          }
           try {
-            const { error } = await sb.auth.signInWithOAuth({
+            await sb.auth.signInWithOAuth({
               provider: 'github',
               options: { redirectTo: window.location.origin }
             });
-            if (error) throw error;
             return;
           } catch (err) {
-            console.warn('Supabase GitHub OAuth not configured, fallback:', err);
+            console.warn('Supabase GitHub OAuth error:', err);
           }
         }
-        const user = { email: 'seobukisul@github.com', nickname: 'seobukisul', plan: 'PRO 👑', source: 'local' };
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
-        updateHeaderAuthState();
-        closeAuthModal();
-        showToast('✨ GitHub 계정으로 간편 로그인되었습니다.');
+        showToast('ℹ️ 상단의 [이메일 주소/비밀번호]로 간편 가입 및 로그인을 이용해 주세요.');
       });
     }
 
