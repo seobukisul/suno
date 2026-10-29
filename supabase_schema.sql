@@ -42,12 +42,16 @@ create policy "게시글 수정/조회수 업데이트"
   for update
   using (true);
 
--- [삭제 권한] 로그인한 작성자 본인만 본인 글 삭제 가능
+-- [삭제 권한] 로그인한 작성자 본인 또는 시스템 관리자(seobukisul@gamil.com, seobukisul@gmail.com) 삭제 허용
 drop policy if exists "작성자 본인 글만 삭제 허용" on public.posts;
-create policy "작성자 본인 글만 삭제 허용"
+drop policy if exists "작성자 본인 및 관리자 삭제 허용" on public.posts;
+create policy "작성자 본인 및 관리자 삭제 허용"
   on public.posts
   for delete
-  using (auth.uid() = user_id);
+  using (
+    auth.uid() = user_id
+    or lower(coalesce(auth.jwt() ->> 'email', '')) in ('seobukisul@gamil.com', 'seobukisul@gmail.com')
+  );
 
 -- 4. 초기 공지사항 및 팁 데이터 삽입 (선택 사항)
 insert into public.posts (title, content, author, category, cat_name, views)

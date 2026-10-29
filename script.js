@@ -639,9 +639,21 @@
     handleHashRoute();
 
     // =========================================================================
-    // 11. Supabase Free Cloud Auth & Database Integration
+    // 11. Supabase Free Cloud Auth & Database Integration & User Profile / Admin
     // =========================================================================
     const AUTH_STORAGE_KEY = 'jent_auth_user';
+
+    // 지정된 시스템 관리자 계정 목록 (지정 계정 및 Gmail 도메인 호환 처리)
+    const ADMIN_EMAILS = [
+      'seobukisul@gamil.com',
+      'seobukisul@gmail.com'
+    ];
+
+    function isUserAdmin(email) {
+      if (!email) return false;
+      return ADMIN_EMAILS.includes(String(email).trim().toLowerCase());
+    }
+
     const authModal = document.getElementById('auth-modal');
     const btnHeaderLogin = document.getElementById('btn-header-login');
     const btnCloseAuthModal = document.getElementById('btn-close-auth-modal');
@@ -653,6 +665,22 @@
     const userDisplayEmail = document.getElementById('user-display-email');
     const userDisplayPlan = document.getElementById('user-display-plan');
     const btnHeaderLogout = document.getElementById('btn-header-logout');
+    const btnHeaderProfile = document.getElementById('btn-header-profile');
+    const userMetaClickable = document.getElementById('user-meta-clickable');
+
+    // Profile Edit Modal Elements
+    const profileModal = document.getElementById('profile-modal');
+    const btnCloseProfileModal = document.getElementById('btn-close-profile-modal');
+    const btnCancelProfile = document.getElementById('btn-cancel-profile');
+    const formProfileEdit = document.getElementById('form-profile-edit');
+    const profileNickname = document.getElementById('profile-nickname');
+    const profileEmail = document.getElementById('profile-email');
+    const profileNewPassword = document.getElementById('profile-new-password');
+    const profileNewPasswordConfirm = document.getElementById('profile-new-password-confirm');
+    const profileRoleCard = document.getElementById('profile-role-card');
+    const profileRoleText = document.getElementById('profile-role-text');
+    const profileRoleBadge = document.getElementById('profile-role-badge');
+    const profileRoleIcon = document.getElementById('profile-role-icon');
 
     function openAuthModal(mode = 'login') {
       if (!authModal) return;
@@ -671,7 +699,15 @@
     function getStoredUser() {
       try {
         const data = localStorage.getItem(AUTH_STORAGE_KEY);
-        return data ? JSON.parse(data) : null;
+        if (!data) return null;
+        const parsed = JSON.parse(data);
+        if (parsed && parsed.email) {
+          parsed.isAdmin = isUserAdmin(parsed.email);
+          if (parsed.isAdmin) {
+            parsed.plan = 'ADMIN 🛡️';
+          }
+        }
+        return parsed;
       } catch (e) {
         return null;
       }
@@ -679,17 +715,175 @@
 
     function updateHeaderAuthState() {
       const user = getStoredUser();
+      const optCatNotice = document.getElementById('opt-cat-notice');
+      const optCatChangelog = document.getElementById('opt-cat-changelog');
+
       if (user && user.email) {
+        const isAdmin = isUserAdmin(user.email);
         if (btnHeaderLogin) btnHeaderLogin.style.display = 'none';
         if (userProfileBadge) {
           userProfileBadge.style.display = 'flex';
           if (userDisplayEmail) userDisplayEmail.textContent = user.nickname || user.email.split('@')[0];
-          if (userDisplayPlan) userDisplayPlan.textContent = user.plan || 'PRO 👑';
+          if (userDisplayPlan) {
+            userDisplayPlan.textContent = isAdmin ? 'ADMIN 🛡️' : (user.plan || 'PRO 👑');
+            if (isAdmin) {
+              userDisplayPlan.classList.add('admin');
+              userDisplayPlan.title = '시스템 총괄 관리자 계정';
+            } else {
+              userDisplayPlan.classList.remove('admin');
+              userDisplayPlan.title = 'PRO 크리에이터 회원';
+            }
+          }
         }
+
+        // 관리자 전용 글쓰기 카테고리 옵션 활성화
+        if (optCatNotice) optCatNotice.style.display = isAdmin ? 'block' : 'none';
+        if (optCatChangelog) optCatChangelog.style.display = isAdmin ? 'block' : 'none';
       } else {
         if (btnHeaderLogin) btnHeaderLogin.style.display = 'block';
         if (userProfileBadge) userProfileBadge.style.display = 'none';
+        if (optCatNotice) optCatNotice.style.display = 'none';
+        if (optCatChangelog) optCatChangelog.style.display = 'none';
       }
+    }
+
+    // Profile Edit Modal Controls
+    function openProfileModal() {
+      const user = getStoredUser();
+      if (!user || !user.email) {
+        openAuthModal('login');
+        return;
+      }
+
+      const isAdmin = isUserAdmin(user.email);
+      if (profileNickname) profileNickname.value = user.nickname || user.email.split('@')[0];
+      if (profileEmail) profileEmail.value = user.email || '';
+      if (profileNewPassword) profileNewPassword.value = '';
+      if (profileNewPasswordConfirm) profileNewPasswordConfirm.value = '';
+
+      if (profileRoleCard) {
+        if (isAdmin) {
+          profileRoleCard.classList.add('admin');
+          if (profileRoleIcon) profileRoleIcon.textContent = '🛡️';
+          if (profileRoleText) profileRoleText.textContent = '시스템 총괄 관리자 (ADMIN)';
+          if (profileRoleBadge) profileRoleBadge.textContent = 'SUPER ADMIN';
+        } else {
+          profileRoleCard.classList.remove('admin');
+          if (profileRoleIcon) profileRoleIcon.textContent = '👑';
+          if (profileRoleText) profileRoleText.textContent = 'PRO 크리에이터 (회원)';
+          if (profileRoleBadge) profileRoleBadge.textContent = 'ACTIVE';
+        }
+      }
+
+      if (profileModal) profileModal.style.display = 'flex';
+    }
+
+    function closeProfileModal() {
+      if (profileModal) profileModal.style.display = 'none';
+    }
+
+    if (btnHeaderProfile) btnHeaderProfile.addEventListener('click', openProfileModal);
+    if (userMetaClickable) userMetaClickable.addEventListener('click', openProfileModal);
+    if (btnCloseProfileModal) btnCloseProfileModal.addEventListener('click', closeProfileModal);
+    if (btnCancelProfile) btnCancelProfile.addEventListener('click', closeProfileModal);
+
+    // Profile Edit Form Submit Handler
+    if (formProfileEdit) {
+      formProfileEdit.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = getStoredUser();
+        if (!user) {
+          closeProfileModal();
+          openAuthModal('login');
+          return;
+        }
+
+        const newNickname = profileNickname ? profileNickname.value.trim() : '';
+        const newEmail = profileEmail ? profileEmail.value.trim() : '';
+        const newPw = profileNewPassword ? profileNewPassword.value : '';
+        const newPwConfirm = profileNewPasswordConfirm ? profileNewPasswordConfirm.value : '';
+        const submitBtn = formProfileEdit.querySelector('button[type="submit"]');
+
+        if (!newNickname) {
+          showToast('⚠️ 닉네임을 입력해 주세요.');
+          return;
+        }
+        if (!newEmail) {
+          showToast('⚠️ 이메일 주소를 입력해 주세요.');
+          return;
+        }
+
+        // 비밀번호 변경 입력 시 유효성 검사
+        if (newPw || newPwConfirm) {
+          if (newPw.length < 6) {
+            showToast('⚠️ 비밀번호는 최소 6자리 이상이어야 합니다.');
+            return;
+          }
+          if (newPw !== newPwConfirm) {
+            showToast('⚠️ 새 비밀번호가 일치하지 않습니다. 다시 확인해 주세요.');
+            return;
+          }
+        }
+
+        const sb = window.getSupabase ? window.getSupabase() : null;
+        let emailChanged = (newEmail.toLowerCase() !== user.email.toLowerCase());
+        let nicknameChanged = (newNickname !== user.nickname);
+        let passwordChanged = !!newPw;
+
+        if (!emailChanged && !nicknameChanged && !passwordChanged) {
+          showToast('ℹ️ 변경된 정보가 없습니다.');
+          closeProfileModal();
+          return;
+        }
+
+        try {
+          if (submitBtn) submitBtn.disabled = true;
+
+          if (sb && user.source === 'supabase') {
+            const updatePayload = {};
+            if (nicknameChanged) {
+              updatePayload.data = { nickname: newNickname };
+            }
+            if (emailChanged) {
+              updatePayload.email = newEmail;
+            }
+            if (passwordChanged) {
+              updatePayload.password = newPw;
+            }
+
+            const { data, error } = await sb.auth.updateUser(updatePayload);
+            if (error) {
+              showToast(`⚠️ 회원정보 수정 실패: ${error.message}`);
+              return;
+            }
+          }
+
+          // 로컬 데이터 동기화
+          user.nickname = newNickname;
+          user.email = newEmail;
+          user.isAdmin = isUserAdmin(newEmail);
+          user.plan = user.isAdmin ? 'ADMIN 🛡️' : (user.plan || 'PRO 👑');
+          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+
+          updateHeaderAuthState();
+          closeProfileModal();
+
+          let msg = '🎉 회원정보가 성공적으로 수정되었습니다!';
+          if (emailChanged) {
+            msg = `🎉 이메일 변경 요청이 접수되었습니다! (${newEmail} 인증 메일을 확인해 주세요)`;
+          } else if (passwordChanged) {
+            msg = '🎉 닉네임 및 비밀번호가 성공적으로 변경되었습니다!';
+          } else {
+            msg = `🎉 닉네임이 '${newNickname}'(으)로 변경되었습니다!`;
+          }
+          showToast(msg);
+        } catch (err) {
+          console.error('Profile update error:', err);
+          showToast(`⚠️ 정보 수정 중 오류: ${err.message}`);
+        } finally {
+          if (submitBtn) submitBtn.disabled = false;
+        }
+      });
     }
 
     // Supabase Auth State Change Listener
@@ -698,11 +892,14 @@
       sb.auth.onAuthStateChange((event, session) => {
         if (session && session.user) {
           const userMeta = session.user.user_metadata || {};
+          const email = session.user.email || '';
+          const isAdmin = isUserAdmin(email);
           const user = {
             id: session.user.id,
-            email: session.user.email,
-            nickname: userMeta.nickname || session.user.email.split('@')[0],
-            plan: userMeta.plan || 'PRO 👑',
+            email: email,
+            nickname: userMeta.nickname || userMeta.full_name || userMeta.name || email.split('@')[0],
+            plan: isAdmin ? 'ADMIN 🛡️' : (userMeta.plan || 'PRO 👑'),
+            isAdmin: isAdmin,
             source: 'supabase'
           };
           localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
@@ -757,17 +954,20 @@
               return;
             }
             const userMeta = data.user.user_metadata || {};
+            const isAdmin = isUserAdmin(data.user.email);
             const user = {
               id: data.user.id,
               email: data.user.email,
-              nickname: userMeta.nickname || email.split('@')[0],
-              plan: userMeta.plan || 'PRO 👑',
+              nickname: userMeta.nickname || userMeta.full_name || userMeta.name || email.split('@')[0],
+              plan: isAdmin ? 'ADMIN 🛡️' : (userMeta.plan || 'PRO 👑'),
+              isAdmin: isAdmin,
               source: 'supabase'
             };
             localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
             updateHeaderAuthState();
             closeAuthModal();
-            showToast(`🎉 환영합니다, ${user.nickname}님! Supabase 클라우드 로그인되었습니다.`);
+            const welcomeRole = isAdmin ? '🛡️ 관리자' : '👑 크리에이터';
+            showToast(`🎉 환영합니다, ${user.nickname}님! ${welcomeRole} 권한으로 로그인되었습니다.`);
             return;
           } catch (err) {
             console.error('Supabase Login error, fallback to local:', err);
@@ -777,10 +977,12 @@
         }
 
         // Fallback: LocalStorage
+        const isAdmin = isUserAdmin(email);
         const user = {
           email,
           nickname: email.split('@')[0],
-          plan: 'PRO 👑',
+          plan: isAdmin ? 'ADMIN 🛡️' : 'PRO 👑',
+          isAdmin: isAdmin,
           loggedInAt: new Date().toISOString(),
           source: 'local'
         };
@@ -806,6 +1008,9 @@
           return;
         }
 
+        const isAdmin = isUserAdmin(email);
+        const assignedPlan = isAdmin ? 'ADMIN 🛡️' : 'PRO 크리에이터 👑';
+
         const sb = window.getSupabase ? window.getSupabase() : null;
         if (sb) {
           try {
@@ -816,7 +1021,7 @@
               options: {
                 data: {
                   nickname,
-                  plan: 'PRO 크리에이터 👑'
+                  plan: assignedPlan
                 }
               }
             });
@@ -833,7 +1038,8 @@
                 id: data.user.id,
                 email,
                 nickname,
-                plan: 'PRO 크리에이터 👑',
+                plan: assignedPlan,
+                isAdmin: isAdmin,
                 joinedAt: new Date().toISOString(),
                 source: 'supabase'
               };
@@ -854,7 +1060,8 @@
         const user = {
           email,
           nickname,
-          plan: 'PRO 크리에이터 👑',
+          plan: assignedPlan,
+          isAdmin: isAdmin,
           joinedAt: new Date().toISOString(),
           source: 'local'
         };
@@ -1049,7 +1256,8 @@
             author: p.author || '익명 크리에이터',
             date: p.created_at ? p.created_at.slice(0, 10) : new Date().toISOString().slice(0, 10),
             views: p.views || 0,
-            content: p.content || ''
+            content: p.content || '',
+            userId: p.user_id || null
           }));
           return cloudPostsCache;
         }
@@ -1153,6 +1361,7 @@
     const postDetailModal = document.getElementById('post-detail-modal');
     const btnClosePostModal = document.getElementById('btn-close-post-modal');
     const btnConfirmPostView = document.getElementById('btn-confirm-post-view');
+    const btnDeletePost = document.getElementById('btn-delete-post');
 
     async function openPostDetail(postId) {
       const posts = getBoardPosts();
@@ -1178,6 +1387,51 @@
       document.getElementById('post-view-date').textContent = post.date;
       document.getElementById('post-view-views').textContent = `조회수 ${post.views}`;
       document.getElementById('post-view-body').textContent = post.content;
+
+      // 삭제 권한 제어: 시스템 관리자이거나 글 작성자 본인일 때 삭제 버튼 활성화
+      const currentUser = getStoredUser();
+      const isAdmin = currentUser && currentUser.isAdmin;
+      const isAuthor = currentUser && (
+        (currentUser.nickname && currentUser.nickname === post.author) ||
+        (currentUser.id && currentUser.id === post.userId)
+      );
+
+      if (btnDeletePost) {
+        if (isAdmin || isAuthor) {
+          btnDeletePost.style.display = 'inline-block';
+          btnDeletePost.textContent = isAdmin ? '🛡️ 관리자 권한으로 삭제' : '🗑️ 게시글 삭제';
+          btnDeletePost.onclick = async () => {
+            if (!confirm(`'${post.title}' 게시글을 정말로 삭제하시겠습니까?`)) return;
+
+            const sb = window.getSupabase ? window.getSupabase() : null;
+            if (sb && post.id && !post.id.startsWith('notice-') && !post.id.startsWith('post-')) {
+              try {
+                const { error } = await sb.from('posts').delete().eq('id', post.id);
+                if (error) {
+                  showToast(`⚠️ 삭제 실패: ${error.message}`);
+                  return;
+                }
+              } catch (e) {
+                console.warn('Supabase post delete exception:', e);
+              }
+            }
+
+            // 캐시 및 로컬 저장소에서 제거
+            if (cloudPostsCache) {
+              cloudPostsCache = cloudPostsCache.filter(p => p.id !== post.id);
+            }
+            const localPosts = getLocalBoardPosts().filter(p => p.id !== post.id);
+            saveLocalBoardPosts(localPosts);
+
+            closePostDetail();
+            renderBoardPosts();
+            showToast('🗑️ 게시글이 성공적으로 삭제되었습니다.');
+          };
+        } else {
+          btnDeletePost.style.display = 'none';
+          btnDeletePost.onclick = null;
+        }
+      }
 
       postDetailModal.style.display = 'flex';
     }
@@ -1232,9 +1486,11 @@
         const submitBtn = formWritePost.querySelector('button[type="submit"]');
 
         const catMap = {
+          notice: '📌 공지사항',
+          changelog: '🚀 릴리즈 노트',
           qna: '❓ 질문 & Q&A',
           tips: '💡 크리에이터 꿀팁',
-          feedback: '💬 피드백'
+          feedback: '💬 기능 건의 및 피드백'
         };
 
         const sb = window.getSupabase ? window.getSupabase() : null;
@@ -1268,7 +1524,8 @@
                   author,
                   date: new Date().toISOString().slice(0, 10),
                   views: 1,
-                  content
+                  content,
+                  userId: user?.id || null
                 });
               }
             }
@@ -1280,6 +1537,7 @@
         }
 
         if (!cloudSaved) {
+          const user = getStoredUser();
           const newPost = {
             id: `post-${Date.now()}`,
             category: cat,
@@ -1288,7 +1546,8 @@
             author,
             date: new Date().toISOString().slice(0, 10),
             views: 1,
-            content
+            content,
+            userId: user?.id || null
           };
           const posts = getLocalBoardPosts();
           posts.unshift(newPost);

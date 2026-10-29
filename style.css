@@ -2133,6 +2133,30 @@ body {
   border: 1px solid rgba(245, 158, 11, 0.4);
 }
 
+.user-tier-tag.admin {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(245, 158, 11, 0.25));
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.7);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+
+.btn-header-profile {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 7px;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+}
+
+.btn-header-profile:hover {
+  background: rgba(0, 242, 254, 0.2);
+  border-color: rgba(0, 242, 254, 0.5);
+  color: #00f2fe;
+}
+
 .btn-header-logout {
   background: none;
   border: none;
@@ -3912,7 +3936,27 @@ body {
 
 .post-detail-footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-post-delete {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-post-delete:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #ffffff;
 }
 
 .btn-post-modal-confirm {
@@ -3952,6 +3996,76 @@ body {
   border-radius: var(--radius-sm);
   font-weight: 800;
   cursor: pointer;
+}
+
+/* Profile Modal & Role Badge */
+.profile-modal-card {
+  max-width: 460px;
+}
+
+.profile-role-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 18px;
+}
+
+.profile-role-card.admin {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(245, 158, 11, 0.12));
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+}
+
+.profile-role-icon {
+  font-size: 24px;
+}
+
+.profile-role-meta {
+  flex: 1;
+}
+
+.profile-role-label {
+  font-size: 11px;
+  color: #94a3b8;
+  letter-spacing: 0.3px;
+}
+
+.profile-role-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.profile-role-card.admin .profile-role-val {
+  color: #fbbf24;
+}
+
+.profile-role-tag {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(0, 242, 254, 0.15);
+  color: #00f2fe;
+  border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+.profile-role-card.admin .profile-role-tag {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.form-hint {
+  display: block;
+  font-size: 11.5px;
+  color: #94a3b8;
+  margin-top: 4px;
+  line-height: 1.4;
 }
 
 /* ==========================================================================

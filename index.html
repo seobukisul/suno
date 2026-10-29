@@ -81,11 +81,12 @@
           </button>
           
           <div class="user-profile-badge" id="user-profile-badge" style="display: none;">
-            <div class="user-avatar-circle">👤</div>
-            <div class="user-meta-info">
+            <div class="user-avatar-circle" id="user-avatar-circle">👤</div>
+            <div class="user-meta-info" id="user-meta-clickable" style="cursor: pointer;" title="클릭하여 회원정보 수정">
               <span class="user-email-text" id="user-display-email">user@jent.ai</span>
               <span class="user-tier-tag" id="user-display-plan">PRO 👑</span>
             </div>
+            <button type="button" class="btn-header-profile" id="btn-header-profile" title="내 정보 수정">⚙️ 정보수정</button>
             <button type="button" class="btn-header-logout" id="btn-header-logout" title="로그아웃">로그아웃</button>
           </div>
         </div>
@@ -1353,6 +1354,7 @@
       </div>
 
       <div class="post-detail-footer">
+        <button type="button" class="btn-post-delete" id="btn-delete-post" style="display: none;">🗑️ 게시글 삭제</button>
         <button type="button" class="btn-post-modal-confirm" id="btn-confirm-post-view">확인</button>
       </div>
     </div>
@@ -1377,6 +1379,8 @@
             <option value="qna">❓ 질문 &amp; Q&amp;A</option>
             <option value="tips">💡 크리에이터 꿀팁</option>
             <option value="feedback">💬 기능 건의 및 피드백</option>
+            <option value="notice" id="opt-cat-notice" style="display: none;">📌 공지사항 (관리자 전용)</option>
+            <option value="changelog" id="opt-cat-changelog" style="display: none;">🚀 릴리즈 노트 (관리자 전용)</option>
           </select>
         </div>
 
@@ -1398,6 +1402,68 @@
         <div class="write-actions-row">
           <button type="button" class="btn-write-cancel" id="btn-cancel-write">취소</button>
           <button type="submit" class="btn-write-submit">게시글 등록하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 4: User Profile & Account Edit Modal (회원정보 수정)
+       ========================================================================= -->
+  <div class="auth-modal-backdrop" id="profile-modal" style="display: none;">
+    <div class="auth-modal-card profile-modal-card">
+      <button type="button" class="auth-modal-close" id="btn-close-profile-modal" title="닫기">✕</button>
+
+      <div class="auth-modal-header">
+        <div class="auth-logo-icon">👤</div>
+        <h3 class="auth-title">회원정보 수정</h3>
+        <p class="auth-sub">닉네임, 이메일 주소 및 비밀번호를 변경할 수 있습니다.</p>
+      </div>
+
+      <!-- User Role / Plan Banner -->
+      <div class="profile-role-card" id="profile-role-card">
+        <div class="profile-role-icon" id="profile-role-icon">👑</div>
+        <div class="profile-role-meta">
+          <div class="profile-role-label">계정 권한 및 등급</div>
+          <div class="profile-role-val" id="profile-role-text">PRO 크리에이터</div>
+        </div>
+        <span class="profile-role-tag" id="profile-role-badge">ACTIVE</span>
+      </div>
+
+      <form class="auth-form" id="form-profile-edit">
+        <div class="form-group">
+          <label for="profile-nickname">크리에이터 닉네임</label>
+          <input type="text" id="profile-nickname" class="auth-input" placeholder="새 닉네임" required>
+        </div>
+
+        <div class="form-group">
+          <label for="profile-email">이메일 주소</label>
+          <input type="email" id="profile-email" class="auth-input" placeholder="새 이메일 주소" required autocomplete="email">
+          <small class="form-hint">※ 이메일 변경 시 Supabase 확인 메일이 발송될 수 있습니다.</small>
+        </div>
+
+        <div class="profile-pw-section">
+          <div class="social-divider" style="margin: 14px 0 10px;">
+            <span>비밀번호 변경 (선택 사항)</span>
+          </div>
+          <p class="form-hint" style="margin-bottom: 10px; line-height: 1.4;">기존 비밀번호를 변경하거나, 구글 소셜 로그인 계정에 신규 비밀번호를 설정할 때 입력하세요.</p>
+
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label for="profile-new-password">새 비밀번호</label>
+            <input type="password" id="profile-new-password" class="auth-input" placeholder="변경 시에만 6자리 이상 입력" minlength="6" autocomplete="new-password">
+          </div>
+
+          <div class="form-group">
+            <label for="profile-new-password-confirm">새 비밀번호 확인</label>
+            <input type="password" id="profile-new-password-confirm" class="auth-input" placeholder="새 비밀번호 다시 입력" minlength="6" autocomplete="new-password">
+          </div>
+        </div>
+
+        <div class="write-actions-row" style="margin-top: 14px;">
+          <button type="button" class="btn-write-cancel" id="btn-cancel-profile">취소</button>
+          <button type="submit" class="btn-auth-submit" id="btn-submit-profile">
+            <span>💾 회원정보 저장</span>
+          </button>
         </div>
       </form>
     </div>
