@@ -585,9 +585,9 @@
       });
 
       if (!found) {
-        const defaultView = document.getElementById('view-pro');
+        const defaultView = document.getElementById('view-free');
         if (defaultView) defaultView.classList.add('active');
-        targetViewId = 'view-pro';
+        targetViewId = 'view-free';
       }
 
       window.scrollTo({ top: 0, behavior: 'instant' });
@@ -631,8 +631,8 @@
 
     // Hash route listener
     function handleHashRoute() {
-      const currentHash = window.location.hash || '#pro';
-      const targetVid = viewMap[currentHash] || 'view-pro';
+      const currentHash = window.location.hash || '#free';
+      const targetVid = viewMap[currentHash] || 'view-free';
       switchView(targetVid, false);
     }
     window.addEventListener('hashchange', handleHashRoute);
