@@ -1105,7 +1105,7 @@
 
     // Social Quick Login (OAuth / Protective Guidance)
     const btnGoogle = document.getElementById('btn-social-google');
-    const btnGithub = document.getElementById('btn-social-github');
+    const btnKakao = document.getElementById('btn-social-kakao');
     if (btnGoogle) {
       btnGoogle.addEventListener('click', async () => {
         const sb = window.getSupabase ? window.getSupabase() : null;
@@ -1129,24 +1129,24 @@
         showToast('ℹ️ 상단의 [이메일 주소/비밀번호]로 간편 가입 및 로그인을 이용해 주세요.');
       });
     }
-    if (btnGithub) {
-      btnGithub.addEventListener('click', async () => {
+    if (btnKakao) {
+      btnKakao.addEventListener('click', async () => {
         const sb = window.getSupabase ? window.getSupabase() : null;
         if (sb) {
-          const isGithubActive = await isOAuthProviderActive('github');
-          if (!isGithubActive) {
-            showToast('⚠️ GitHub 로그인은 Supabase 대시보드에서 GitHub OAuth 앱 등록이 필요합니다. 상단의 [이메일 가입/로그인]을 이용해 주세요!');
+          const isKakaoActive = await isOAuthProviderActive('kakao');
+          if (!isKakaoActive) {
+            showToast('⚠️ 카카오 로그인은 Supabase 대시보드에서 Kakao REST API 키 등록이 필요합니다. 상단의 [이메일 가입/로그인]을 이용해 주세요!');
             tabAuthSignup?.click();
             return;
           }
           try {
             await sb.auth.signInWithOAuth({
-              provider: 'github',
+              provider: 'kakao',
               options: { redirectTo: window.location.origin }
             });
             return;
           } catch (err) {
-            console.warn('Supabase GitHub OAuth error:', err);
+            console.warn('Supabase Kakao OAuth error:', err);
           }
         }
         showToast('ℹ️ 상단의 [이메일 주소/비밀번호]로 간편 가입 및 로그인을 이용해 주세요.');
@@ -1433,15 +1433,287 @@
         }
       }
 
+      // 댓글 시스템 연동 및 렌더링
+      currentViewingPost = post;
+      renderCommentsForPost(post.id);
+
       postDetailModal.style.display = 'flex';
     }
 
     function closePostDetail() {
       if (postDetailModal) postDetailModal.style.display = 'none';
+      currentViewingPost = null;
     }
 
     if (btnClosePostModal) btnClosePostModal.addEventListener('click', closePostDetail);
     if (btnConfirmPostView) btnConfirmPostView.addEventListener('click', closePostDetail);
+
+    // =========================================================================
+    // 13. Comments & Answers System (Supabase + LocalStorage Fallback)
+    // =========================================================================
+    const COMMENTS_STORAGE_KEY = 'jent_studio_board_comments';
+    let currentViewingPost = null;
+
+    const defaultComments = {
+      'notice-1': [
+        {
+          id: 'c-1',
+          postId: 'notice-1',
+          author: '비트크리에이터',
+          content: '1.5초 병렬 추출 기능 정말 기대됩니다! 데모 프리젠테이션 꼭 참여하겠습니다.',
+          date: '2026-10-29 11:20',
+          isAdmin: false
+        },
+        {
+          id: 'c-2',
+          postId: 'notice-1',
+          author: '개발팀 자비스',
+          content: '응원 감사드립니다! 이번 v2.6.0에서는 M4A 및 WAV 병렬 추출 성능이 대폭 향상되었습니다.',
+          date: '2026-10-29 11:45',
+          isAdmin: true
+        }
+      ],
+      'notice-2': [
+        {
+          id: 'c-3',
+          postId: 'notice-2',
+          author: '유튜브BGM러',
+          content: '-14.0 LUFS로 맞추니까 유튜브 업로드 후에도 소리가 먹먹해지지 않고 짱짱하네요. 꿀팁 감사합니다!',
+          date: '2026-10-28 15:10',
+          isAdmin: false
+        }
+      ]
+    };
+
+    function getLocalCommentsMap() {
+      try {
+        const data = localStorage.getItem(COMMENTS_STORAGE_KEY);
+        if (data) return JSON.parse(data);
+      } catch (e) {}
+      localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify(defaultComments));
+      return defaultComments;
+    }
+
+    function saveLocalCommentsMap(map) {
+      localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify(map));
+    }
+
+    async function fetchComments(postId) {
+      const sb = window.getSupabase ? window.getSupabase() : null;
+      if (sb) {
+        try {
+          const { data, error } = await sb
+            .from('comments')
+            .select('*')
+            .eq('post_id', String(postId))
+            .order('created_at', { ascending: true });
+
+          if (!error && data && data.length > 0) {
+            return data.map(c => ({
+              id: String(c.id),
+              postId: String(c.post_id),
+              author: c.author || '익명',
+              content: c.content || '',
+              date: c.created_at ? c.created_at.slice(0, 16).replace('T', ' ') : new Date().toISOString().slice(0, 16).replace('T', ' '),
+              userId: c.user_id || null,
+              isAdmin: c.author.includes('관리자') || c.author.includes('자비스')
+            }));
+          }
+        } catch (e) {}
+      }
+
+      const map = getLocalCommentsMap();
+      return map[postId] || [];
+    }
+
+    async function renderCommentsForPost(postId) {
+      const commentsList = document.getElementById('post-comments-list');
+      const countEl = document.getElementById('post-comments-count');
+      const authorInput = document.getElementById('comment-author-input');
+      const userHint = document.getElementById('comment-user-hint');
+      if (!commentsList) return;
+
+      const user = getStoredUser();
+      if (authorInput) {
+        if (user) {
+          authorInput.value = user.nickname || user.email.split('@')[0];
+          if (userHint) userHint.textContent = user.isAdmin ? '🛡️ 관리자 계정으로 작성' : '👤 로그인 계정 닉네임 자동 적용';
+        } else {
+          authorInput.value = '';
+          if (userHint) userHint.textContent = '비회원 닉네임 직접 입력 가능';
+        }
+      }
+
+      const comments = await fetchComments(postId);
+      if (countEl) countEl.textContent = `(${comments.length})`;
+
+      if (comments.length === 0) {
+        commentsList.innerHTML = `
+          <div class="comment-empty-msg">
+            <span>💬 아직 등록된 답변이나 댓글이 없습니다. 첫 번째 크리에이터 의견을 남겨보세요!</span>
+          </div>
+        `;
+        return;
+      }
+
+      const isCurrentAdmin = user && user.isAdmin;
+
+      commentsList.innerHTML = comments.map(c => {
+        const isPostAuthor = currentViewingPost && currentViewingPost.author === c.author;
+        const isCommentAuthor = user && (user.nickname === c.author || (user.id && user.id === c.userId));
+        const canDelete = isCurrentAdmin || isCommentAuthor;
+
+        let badgeHtml = '';
+        if (c.isAdmin) {
+          badgeHtml = '<span class="comment-tag-badge admin">ADMIN 🛡️</span>';
+        } else if (isPostAuthor) {
+          badgeHtml = '<span class="comment-tag-badge author">작성자 ✍️</span>';
+        }
+
+        return `
+          <div class="comment-card" data-comment-id="${c.id}">
+            <div class="comment-card-top">
+              <div class="comment-author-wrap">
+                <span class="comment-author-name">${c.author}</span>
+                ${badgeHtml}
+              </div>
+              <div class="comment-meta-right">
+                <span class="comment-time">${c.date}</span>
+                ${canDelete ? `<button type="button" class="btn-comment-delete" data-comment-id="${c.id}" title="댓글 삭제">🗑️ 삭제</button>` : ''}
+              </div>
+            </div>
+            <div class="comment-body">${c.content}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Add Comment Form Submit
+    const formAddComment = document.getElementById('form-add-comment');
+    if (formAddComment) {
+      formAddComment.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentViewingPost) return;
+
+        const authorInput = document.getElementById('comment-author-input');
+        const contentInput = document.getElementById('comment-content-input');
+        const submitBtn = formAddComment.querySelector('button[type="submit"]');
+
+        const author = authorInput ? authorInput.value.trim() : '';
+        const content = contentInput ? contentInput.value.trim() : '';
+
+        if (!author) {
+          showToast('⚠️ 닉네임을 입력해 주세요.');
+          return;
+        }
+        if (!content) {
+          showToast('⚠️ 댓글 내용을 입력해 주세요.');
+          return;
+        }
+
+        const user = getStoredUser();
+        const sb = window.getSupabase ? window.getSupabase() : null;
+        let cloudSaved = false;
+
+        try {
+          if (submitBtn) submitBtn.disabled = true;
+
+          if (sb && currentViewingPost.id && !currentViewingPost.id.startsWith('notice-') && !currentViewingPost.id.startsWith('post-')) {
+            const { data, error } = await sb.from('comments').insert([{
+              post_id: String(currentViewingPost.id),
+              author,
+              content,
+              user_id: user?.id || null
+            }]).select();
+
+            if (!error && data && data[0]) {
+              cloudSaved = true;
+            }
+          }
+
+          if (!cloudSaved) {
+            const map = getLocalCommentsMap();
+            if (!map[currentViewingPost.id]) map[currentViewingPost.id] = [];
+            map[currentViewingPost.id].push({
+              id: `c-${Date.now()}`,
+              postId: String(currentViewingPost.id),
+              author,
+              content,
+              date: new Date().toISOString().slice(0, 16).replace('T', ' '),
+              userId: user?.id || null,
+              isAdmin: user ? user.isAdmin : false
+            });
+            saveLocalCommentsMap(map);
+          }
+
+          if (contentInput) contentInput.value = '';
+          await renderCommentsForPost(currentViewingPost.id);
+          showToast('💬 댓글 및 답변이 등록되었습니다!');
+        } catch (err) {
+          console.error('Comment submit error:', err);
+          showToast(`⚠️ 댓글 저장 오류: ${err.message}`);
+        } finally {
+          if (submitBtn) submitBtn.disabled = false;
+        }
+      });
+    }
+
+    // Comment Delete Delegate
+    document.addEventListener('click', async (e) => {
+      const delBtn = e.target.closest('.btn-comment-delete');
+      if (!delBtn || !currentViewingPost) return;
+
+      const commentId = delBtn.dataset.commentId;
+      if (!confirm('정말 이 댓글을 삭제하시겠습니까?')) return;
+
+      const sb = window.getSupabase ? window.getSupabase() : null;
+      if (sb && !commentId.startsWith('c-')) {
+        try {
+          await sb.from('comments').delete().eq('id', commentId);
+        } catch (e) {}
+      }
+
+      const map = getLocalCommentsMap();
+      if (map[currentViewingPost.id]) {
+        map[currentViewingPost.id] = map[currentViewingPost.id].filter(c => c.id !== commentId);
+        saveLocalCommentsMap(map);
+      }
+
+      await renderCommentsForPost(currentViewingPost.id);
+      showToast('🗑️ 댓글이 삭제되었습니다.');
+    });
+
+    // Feature Card Action Buttons Delegate
+    document.querySelectorAll('.btn-feature-action').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        if (action === 'demo-sound') {
+          const sim = document.getElementById('simulator');
+          if (sim) {
+            sim.scrollIntoView({ behavior: 'smooth' });
+            showToast('🎧 100% 사운드 격리 시뮬레이터입니다. [WAV] 또는 [MP3]를 눌러보세요!');
+          }
+        } else if (action === 'demo-wav') {
+          const btnWav = document.getElementById('sim-player-bar-wav');
+          if (btnWav) {
+            btnWav.click();
+            showToast('💎 16-bit 무손실 WAV 실시간 캡처가 시작되었습니다!');
+          }
+        } else if (action === 'demo-sync') {
+          const btnPlay = document.getElementById('sim-main-play-btn');
+          if (btnPlay) {
+            btnPlay.click();
+            showToast('⏱️ 0:00초 첫 마디 자동 싱크 재생이 실행되었습니다.');
+          }
+        } else if (action === 'demo-track') {
+          const sim = document.getElementById('simulator');
+          if (sim) {
+            sim.scrollIntoView({ behavior: 'smooth' });
+            showToast('🎯 동일 제목 생성 쌍도 고유 트랙 길이와 ID로 완벽히 분리 캡처합니다.');
+          }
+        }
+      });
+    });
 
     // Click on board rows or pinned notices
     document.addEventListener('click', (e) => {

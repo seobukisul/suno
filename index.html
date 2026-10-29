@@ -909,34 +909,127 @@
           </div>
 
           <div class="features-grid">
+            
+            <!-- Feature Card 1 -->
             <div class="feature-card">
-              <div class="feature-icon-box">🛡️</div>
-              <h3 class="feature-card-title">100% 사운드 분리 격리</h3>
+              <div class="feature-card-header">
+                <div class="feature-icon-box">🛡️</div>
+                <div class="feature-header-meta">
+                  <span class="feature-sub-tag">Pure Isolation</span>
+                  <h3 class="feature-card-title">100% 사운드 분리 격리</h3>
+                </div>
+              </div>
               <p class="feature-card-desc">
-                PC 알림음, 디스코드 등 외부 소음 없이 Suno 원음만 깨끗하게 녹음합니다.
+                PC 시스템 알림음, 디스코드, 유튜브 등 외부 소음이 일절 섞이지 않고 브라우저 내부 파이프라인에서 오직 Suno 음원 스트림만 100% 분리 추출합니다.
               </p>
+              <div class="feature-specs-box">
+                <div class="f-spec-item">
+                  <span class="f-spec-dot"></span>
+                  <span><strong>가상 버스 격리:</strong> Suno 전용 오디오 가상 버스 독립 라우팅</span>
+                </div>
+                <div class="f-spec-item">
+                  <span class="f-spec-dot"></span>
+                  <span><strong>조용한 캡처:</strong> 스피커를 끈 상태에서도 100% 무음 원음 녹음 완료</span>
+                </div>
+              </div>
+              <div class="feature-card-action">
+                <button type="button" class="btn-feature-action" data-action="demo-sound">
+                  <span>🎧 사운드 격리 시연 보기</span>
+                  <span class="action-arrow">→</span>
+                </button>
+              </div>
             </div>
+
+            <!-- Feature Card 2 -->
             <div class="feature-card">
-              <div class="feature-icon-box">💎</div>
-              <h3 class="feature-card-title">16-bit WAV &amp; 320k MP3</h3>
+              <div class="feature-card-header">
+                <div class="feature-icon-box">💎</div>
+                <div class="feature-header-meta">
+                  <span class="feature-sub-tag">Studio Quality</span>
+                  <h3 class="feature-card-title">16-bit WAV &amp; 320k MP3</h3>
+                </div>
+              </div>
               <p class="feature-card-desc">
-                무손실 16-bit WAV와 320kbps MP3를 실시간 고음질로 인코딩합니다.
+                압축 손실 없는 순수 16-bit 44.1kHz 무손실 PCM WAV와 최고 음질 320kbps MP3를 실시간 고속 인코더로 원클릭 생성 및 저장합니다.
               </p>
+              <div class="feature-specs-box">
+                <div class="f-spec-item">
+                  <span class="f-spec-dot"></span>
+                  <span><strong>무손실 WAV:</strong> 16-bit 44.1kHz Stereo PCM (DAW 믹싱 규격)</span>
+                </div>
+                <div class="f-spec-item">
+                  <span class="f-spec-dot"></span>
+                  <span><strong>고음질 MP3:</strong> LameJS 멀티스레드 가속 320kbps 초고속 인코딩</span>
+                </div>
+              </div>
+              <div class="feature-card-action">
+                <button type="button" class="btn-feature-action" data-action="demo-wav">
+                  <span>💎 16-bit WAV 캡처 실행</span>
+                  <span class="action-arrow">→</span>
+                </button>
+              </div>
             </div>
+
+            <!-- Feature Card 3 -->
             <div class="feature-card">
-              <div class="feature-icon-box">🔄</div>
-              <h3 class="feature-card-title">0:00초 자동 동기화</h3>
+              <div class="feature-card-header">
+                <div class="feature-icon-box">🔄</div>
+                <div class="feature-header-meta">
+                  <span class="feature-sub-tag">Auto Sync &amp; Save</span>
+                  <h3 class="feature-card-title">0:00초 자동 동기화</h3>
+                </div>
+              </div>
               <p class="feature-card-desc">
-                클릭 한 번으로 0:00초부터 자동 재생되며, 곡이 끝나면 자동 저장됩니다.
+                곡 중간에 다운로드를 눌러도 0:00초 첫 마디로 즉시 자동 이동하여 캡처를 시작하며, 곡이 끝나면 별도 조작 없이 자동으로 파일이 저장됩니다.
               </p>
+              <div class="feature-specs-box">
+                <div class="f-spec-item">
+                  <span class="f-spec-dot"></span>
+                  <span><strong>첫 비트 동기화:</strong> HTML5 Audio 타임스탬프 밀리초 단위 정밀 싱크</span>
+                </div>
+                <div class="f-spec-item">
+                  <span class="f-spec-dot"></span>
+                  <span><strong>완곡 자동 감지:</strong> 재생 완료 시 즉각 버퍼 플러시 및 세이브 완료</span>
+                </div>
+              </div>
+              <div class="feature-card-action">
+                <button type="button" class="btn-feature-action" data-action="demo-sync">
+                  <span>⏱️ 0:00초 싱크 재생 체험</span>
+                  <span class="action-arrow">→</span>
+                </button>
+              </div>
             </div>
+
+            <!-- Feature Card 4 -->
             <div class="feature-card">
-              <div class="feature-icon-box">🎯</div>
-              <h3 class="feature-card-title">동일 제목 생성 쌍 완벽 분리</h3>
+              <div class="feature-card-header">
+                <div class="feature-icon-box">🎯</div>
+                <div class="feature-header-meta">
+                  <span class="feature-sub-tag">Smart Track Pairing</span>
+                  <h3 class="feature-card-title">동일 제목 생성 쌍 완벽 분리</h3>
+                </div>
+              </div>
               <p class="feature-card-desc">
-                제목이 동일한 생성 곡도 고유 ID와 길이를 판별해 원하는 곡을 정확히 다운로드합니다.
+                Suno가 동시에 생성하는 2곡의 동일 제목 트랙도 고유 재생 지속시간과 미디어 버퍼 ID를 실시간 식별하여 사용자가 원하는 트랙만 정확하게 추출합니다.
               </p>
+              <div class="feature-specs-box">
+                <div class="f-spec-item">
+                  <span class="f-spec-dot"></span>
+                  <span><strong>트랙 지문 식별:</strong> 음원 고유 지속시간(Duration) 및 스트림 매칭</span>
+                </div>
+                <div class="f-spec-item">
+                  <span class="f-spec-dot"></span>
+                  <span><strong>덮어쓰기 방지:</strong> 고유 파일명 자동 부여 및 독립적 다운로드 관리</span>
+                </div>
+              </div>
+              <div class="feature-card-action">
+                <button type="button" class="btn-feature-action" data-action="demo-track">
+                  <span>🎯 생성 트랙 분리 확인</span>
+                  <span class="action-arrow">→</span>
+                </button>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
@@ -1322,8 +1415,8 @@
         <button type="button" class="btn-social google" id="btn-social-google">
           <span>Google 계정으로 계속하기</span>
         </button>
-        <button type="button" class="btn-social github" id="btn-social-github">
-          <span>GitHub 계정으로 계속하기</span>
+        <button type="button" class="btn-social kakao" id="btn-social-kakao">
+          <span>💬 카카오 계정으로 계속하기</span>
         </button>
       </div>
 
@@ -1351,6 +1444,36 @@
 
       <div class="post-detail-body" id="post-view-body">
         <!-- Post content dynamically rendered -->
+      </div>
+
+      <!-- Comments & Answers Section -->
+      <div class="post-comments-wrapper" id="post-comments-wrapper">
+        <div class="comments-section-header">
+          <div class="comments-title-wrap">
+            <span class="comments-icon">💬</span>
+            <h3 class="comments-title">답변 및 댓글 <span class="comments-count" id="post-comments-count">(0)</span></h3>
+          </div>
+          <span class="comments-sub-hint">크리에이터 의견 및 질의응답</span>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comments-list" id="post-comments-list">
+          <!-- Dynamically rendered -->
+        </div>
+
+        <!-- Add Comment Form -->
+        <form class="comment-write-form" id="form-add-comment">
+          <div class="comment-input-row">
+            <input type="text" id="comment-author-input" class="comment-author-field" placeholder="작성자 닉네임" required>
+            <div class="comment-user-hint" id="comment-user-hint">로그인 중인 계정 닉네임 자동 적용</div>
+          </div>
+          <div class="comment-textarea-wrap">
+            <textarea id="comment-content-input" class="comment-textarea" placeholder="답변이나 의견, 유용한 팁을 남겨보세요..." rows="3" required></textarea>
+            <button type="submit" class="btn-comment-submit" id="btn-submit-comment">
+              <span>💬 답변/댓글 등록</span>
+            </button>
+          </div>
+        </form>
       </div>
 
       <div class="post-detail-footer">

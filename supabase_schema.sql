@@ -81,5 +81,42 @@ values
     1105
   );
 
+-- 5. 댓글 및 답변 (comments) 테이블 생성
+create table if not exists public.comments (
+  id bigint generated always as identity primary key,
+  post_id text not null,
+  created_at timestamptz default now() not null,
+  author text not null,
+  content text not null,
+  user_id uuid references auth.users(id) on delete set null
+);
+
+-- 댓글 RLS 활성화
+alter table public.comments enable row level security;
+
+-- [댓글 조회 권한] 누구나 댓글 조회 가능
+drop policy if exists "누구나 댓글 조회 가능" on public.comments;
+create policy "누구나 댓글 조회 가능"
+  on public.comments
+  for select
+  using (true);
+
+-- [댓글 작성 권한] 누구나 댓글 작성 가능
+drop policy if exists "누구나 댓글 작성 가능" on public.comments;
+create policy "누구나 댓글 작성 가능"
+  on public.comments
+  for insert
+  with check (true);
+
+-- [댓글 삭제 권한] 작성자 본인 또는 시스템 관리자 삭제 허용
+drop policy if exists "댓글 작성자 및 관리자 삭제 허용" on public.comments;
+create policy "댓글 작성자 및 관리자 삭제 허용"
+  on public.comments
+  for delete
+  using (
+    auth.uid() = user_id
+    or lower(coalesce(auth.jwt() ->> 'email', '')) in ('seobukisul@gamil.com', 'seobukisul@gmail.com')
+  );
+
 -- 완료 안내
 -- 테이블 생성 및 RLS 정책 적용이 완료되었습니다!
