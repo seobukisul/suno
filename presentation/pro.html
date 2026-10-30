@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JENT STUDIO PRO — 올인원 스튜디오 스위트 발표용</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient Light Effects -->
+  <div class="ambient-glow"></div>
+
+  <!-- Top Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Presentation 16:9 Viewport -->
+  <main id="presentation-viewport">
+    <div class="slide-deck">
+
+      <!-- ===================================================================
+           Slide 01: Vision & Hook (프로 버전 오프닝)
+           =================================================================== -->
+      <section class="slide active" id="slide-1">
+        <div class="hero-content">
+          <div class="hero-pill" style="border-color:rgba(0,240,255,0.4); background:rgba(0,240,255,0.1); color:var(--cyan);">
+            <span>✨</span> JENT STUDIO NEXT-GEN PRO SUITE 2026
+          </div>
+          <h1 class="hero-title">
+            Suno AI 창작의 새로운 표준,<br>
+            <span class="gradient-text">JENT STUDIO PRO</span>
+          </h1>
+          <p class="hero-desc">
+            단순 1배속 녹음의 한계를 넘어 — 기획(최신 AI 작사)부터<br>
+            1.5초 무음 병렬 추출, 스튜디오급 DSP 마스터링까지 브라우저 하나로 완전 자동화합니다.
+          </p>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-num">SidePanel</span>
+              <span class="stat-label">브라우저 우측 밀착 도킹</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">1.5초</span>
+              <span class="stat-label">120배 고속 무음 병렬 추출</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">-14 LUFS</span>
+              <span class="stat-label">EBU R128 글로벌 스튜디오 마스터링</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 02: The 4 Bottlenecks (크리에이터의 4대 병목)
+           =================================================================== -->
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Problem Definition</div>
+            <h2 class="slide-title">크리에이터를 지치게 만드는 4대 병목</h2>
+            <p class="slide-subtitle">기존의 수작업 방식이 야기하는 시간 손실과 플랫폼 품질 페널티</p>
+          </div>
+          <span class="slide-badge">현주소 분석</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-4">
+            <div class="glass-card bottleneck-card">
+              <span class="card-num">01</span>
+              <h3 class="card-title">극심한 시간 낭비</h3>
+              <p class="card-desc">10곡을 다운로드하려면 30분 동안 컴퓨터 스피커를 켜두고 1배속 재생을 묵묵히 기다려야 합니다.</p>
+              <div class="card-impact">⏳ 작업 효율 80% 저하</div>
+            </div>
+
+            <div class="glass-card bottleneck-card">
+              <span class="card-num">02</span>
+              <h3 class="card-title">플랫폼 음압 페널티</h3>
+              <p class="card-desc">Suno 원본 음량 편차로 인해 유튜브나 스포티파이 업로드 시 소리가 급감하거나 찌직거리는 클리핑 발생.</p>
+              <div class="card-impact">📉 청취율 및 조회수 손실</div>
+            </div>
+
+            <div class="glass-card bottleneck-card">
+              <span class="card-num">03</span>
+              <h3 class="card-title">메타데이터 실종</h3>
+              <p class="card-desc">다운로드된 파일에 앨범 커버와 아티스트, 가사가 없어 차량 및 모바일 기기에서 '알 수 없는 곡' 표시.</p>
+              <div class="card-impact">🏷️ 음원 유통 불가능</div>
+            </div>
+
+            <div class="glass-card bottleneck-card">
+              <span class="card-num">04</span>
+              <h3 class="card-title">무음 노가다 편집</h3>
+              <p class="card-desc">1시간 연속 BGM 제작 시 곡 앞뒤의 어색한 묵음 구간을 DAW로 하나하나 잘라내야 하는 반복 노동.</p>
+              <div class="card-impact">✂️ 수시간 추가 소요</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 03: Architecture (SidePanel 올인원 아키텍처)
+           =================================================================== -->
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">System Architecture</div>
+            <h2 class="slide-title">브라우저 네이티브 SidePanel 올인원 스위트</h2>
+            <p class="slide-subtitle">Suno 메인 화면을 가리지 않고 우측에 완벽히 밀착 도킹되는 프로페셔널 워크스페이스</p>
+          </div>
+          <span class="slide-badge">네이티브 도킹</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="glass-card" style="border-color:var(--border-accent);">
+              <h3 style="font-size:1.3rem; font-weight:800; color:#FFF; margin-bottom:0.75rem;">🎙️ JENT STUDIO PRO 핵심 아키텍처</h3>
+              <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.6; margin-bottom:1.25rem;">
+                기존 팝업(Popup) 창처럼 화면 밖을 클릭하면 꺼지는 불편함이 없습니다. 크롬 및 네이버 웨일 브라우저의 네이티브 SidePanel API로 구동되어 영구히 도킹됩니다.
+              </p>
+              <ul class="arch-list">
+                <li><span>🎯</span> <strong>듀얼 탭 통합:</strong> [탭 1] AI 작사 & 자동입력 ➔ [탭 2] 어드밴스드 다운로드 센터</li>
+                <li><span>🔄</span> <strong>Suno 실시간 동기화:</strong> 좋아요(따봉) 누른 엄선 곡만 우측 패널에 자동 미러링</li>
+                <li><span>⚡</span> <strong>Web Worker 멀티스레드:</strong> 백그라운드에서 UI 멈춤 없이 초고속 병렬 처리</li>
+              </ul>
+            </div>
+
+            <div class="glass-card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; background:rgba(0,240,255,0.02);">
+              <div style="font-size:3rem; margin-bottom:1rem;">🎛️</div>
+              <h4 style="font-size:1.35rem; font-weight:800; color:var(--cyan); margin-bottom:0.5rem;">One-Stop Production Cycle</h4>
+              <p style="font-size:0.95rem; color:#CBD5E1; line-height:1.6; max-width:440px;">
+                기획(가사 AI 생성) ➔ 제작(Suno 자동 입력) ➔ 추출(1.5초 병렬 무음 캡처) ➔ 후가공(0-Gap 병합 & 스튜디오 마스터링)의 전 과정을 단 한 화면에서 완결!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 04: Fast Parallel Download (1.5초 무음 병렬 다운로드 기술)
+           =================================================================== -->
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Core Engine 01</div>
+            <h2 class="slide-title">1.5초 무음 병렬 다운로드 엔진</h2>
+            <p class="slide-subtitle">스피커 소리 없이(Gain 0.0) 백그라운드 메모리 버퍼 직결 멀티스레드 인코딩</p>
+          </div>
+          <span class="slide-badge">120배 가속</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="glass-card">
+              <div style="font-size:1.8rem; margin-bottom:0.5rem;">🔇</div>
+              <h3 class="card-title">100% 무음 백그라운드</h3>
+              <p class="card-desc">
+                스피커로 1배속 재생을 들을 필요 없이, 내부 가상 게인(Gain 0.0) 상태에서 수 초 만에 오디오 데이터를 전송받아 디코딩합니다.
+              </p>
+            </div>
+
+            <div class="glass-card">
+              <div style="font-size:1.8rem; margin-bottom:0.5rem;">⚡</div>
+              <h3 class="card-title">동시 병렬 멀티스레드</h3>
+              <p class="card-desc">
+                선택된 10곡, 20곡의 음원을 브라우저 Web Worker 독립 프로세스로 분산하여 동시 병렬로 인코딩하므로 브라우저 랙이 전혀 없습니다.
+              </p>
+            </div>
+
+            <div class="glass-card">
+              <div style="font-size:1.8rem; margin-bottom:0.5rem;">📦</div>
+              <h3 class="card-title">3대 포맷 & 메타데이터</h3>
+              <p class="card-desc">
+                16-bit 무손실 WAV, 순정 M4A(AAC), 320k MP3 중 원하는 포맷을 선택하면 고화질 앨범 아트와 가사 메타데이터까지 자동 패키징됩니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 05: Speed Race Live Demo (속도 레이스 인터랙션)
+           =================================================================== -->
+      <section class="slide" id="slide-5">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Live Demo • Speed Comparison</div>
+            <h2 class="slide-title">속도 대결: 1배속 녹음 vs JENT PRO 병렬</h2>
+            <p class="slide-subtitle">10곡 동시 다운로드 시 걸리는 실제 작업 시간을 눈앞에서 시뮬레이션합니다.</p>
+          </div>
+          <button class="btn-interactive" id="startRaceBtn">
+            🚀 10곡 동시 다운로드 레이스 시작
+          </button>
+        </div>
+
+        <div class="slide-body">
+          <div class="race-track-container">
+            <!-- Lane 1: Old -->
+            <div class="race-lane">
+              <div class="race-lane-header">
+                <span class="race-name"><span>🐢</span> 기존 1배속 실시간 청음 녹음 (10곡 x 3분 = 총 30분 소요)</span>
+                <span class="race-time" id="normalRaceTime" style="color:#94A3B8;">00:00 (대기)</span>
+              </div>
+              <div class="race-bar-bg">
+                <div class="race-bar-fill normal" id="normalRaceFill"></div>
+              </div>
+              <span style="font-size:0.8rem; color:var(--text-dim);">컴퓨터 스피커가 점유되며 다른 작업을 할 수 없습니다.</span>
+            </div>
+
+            <!-- Lane 2: PRO Turbo -->
+            <div class="race-lane winner">
+              <div class="race-lane-header">
+                <span class="race-name"><span>⚡</span> JENT STUDIO PRO (Web Worker 멀티스레드 병렬 가속)</span>
+                <span class="race-time" id="turboRaceTime">0.00초</span>
+              </div>
+              <div class="race-bar-bg">
+                <div class="race-bar-fill turbo" id="turboRaceFill"></div>
+              </div>
+              
+              <div class="race-status-pills">
+                <span class="track-pill">Track 01</span>
+                <span class="track-pill">Track 02</span>
+                <span class="track-pill">Track 03</span>
+                <span class="track-pill">Track 04</span>
+                <span class="track-pill">Track 05</span>
+                <span class="track-pill">Track 06</span>
+                <span class="track-pill">Track 07</span>
+                <span class="track-pill">Track 08</span>
+                <span class="track-pill">Track 09</span>
+                <span class="track-pill">Track 10</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 06: DSP Mastering Architecture (마스터링 기술 명세)
+           =================================================================== -->
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Core Engine 02</div>
+            <h2 class="slide-title">원클릭 스튜디오 DSP 마스터링 엔진</h2>
+            <p class="slide-subtitle">유튜브 글로벌 스트리밍 표준 -14.0 LUFS 정규화 및 True-Peak -1.0 dBTP 리미터</p>
+          </div>
+          <span class="slide-badge">EBU R128 표준</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="dsp-cards-grid">
+            <!-- Box 1: 6-Band EQ -->
+            <div class="dsp-card accent-cyan">
+              <div class="dsp-card-header">
+                <div class="dsp-card-title-wrap">
+                  <span class="dsp-icon">🎛️</span>
+                  <span class="dsp-card-title">6-Band 파라메트릭 EQ</span>
+                </div>
+                <span class="dsp-tag cyan">64-Bit Float EQ</span>
+              </div>
+              <ul class="dsp-points-list">
+                <li><span>▪️</span> <span><strong>서브 베이스 펀치감:</strong> 40~60Hz 초저역대를 단단하게 부스트</span></li>
+                <li><span>▪️</span> <span><strong>보컬 명료도 향상:</strong> 3.2kHz 중고역대 피크를 섬세하게 보정</span></li>
+                <li><span>▪️</span> <span><strong>실크 에어감 광택:</strong> 8.5kHz 초고역대 오픈감과 입체감 극대화</span></li>
+              </ul>
+            </div>
+
+            <!-- Box 2: 3D Stereo Imager -->
+            <div class="dsp-card accent-purple">
+              <div class="dsp-card-header">
+                <div class="dsp-card-title-wrap">
+                  <span class="dsp-icon">🌐</span>
+                  <span class="dsp-card-title">Mid/Side 3D 스테레오 이미저</span>
+                </div>
+                <span class="dsp-tag purple">M/S Width 125%</span>
+              </div>
+              <ul class="dsp-points-list">
+                <li><span>▪️</span> <span><strong>센터 보컬 잠금:</strong> 킥과 메인 보컬은 중앙에 단단히 센터 고정</span></li>
+                <li><span>▪️</span> <span><strong>사이드 공간감 확장:</strong> 스트링, 코러스, 신스 패드 사이드만 125% 확장</span></li>
+                <li><span>▪️</span> <span><strong>모노 호환성 100%:</strong> 스마트폰 모노 스피커에서도 위상 캔슬링 제로</span></li>
+              </ul>
+            </div>
+
+            <!-- Box 3: Analog Tape Saturation -->
+            <div class="dsp-card accent-emerald">
+              <div class="dsp-card-header">
+                <div class="dsp-card-title-wrap">
+                  <span class="dsp-icon">📼</span>
+                  <span class="dsp-card-title">아날로그 테이프 새추레이션</span>
+                </div>
+                <span class="dsp-tag emerald">Warmth Saturation</span>
+              </div>
+              <ul class="dsp-points-list">
+                <li><span>▪️</span> <span><strong>진공관 하모닉스 배음:</strong> AI 특유의 차갑고 날카로운 고역을 부드럽게 감싸줌</span></li>
+                <li><span>▪️</span> <span><strong>아날로그 질감 복원:</strong> 고급 빈티지 테이프 머신 특유의 온기와 밀도감 부여</span></li>
+                <li><span>▪️</span> <span><strong>자연스러운 음압 증폭:</strong> 청감상 피로도 없는 편안하고 풍성한 사운드 완성</span></li>
+              </ul>
+            </div>
+
+            <!-- Box 4: True-Peak Limiter -->
+            <div class="dsp-card accent-rose">
+              <div class="dsp-card-header">
+                <div class="dsp-card-title-wrap">
+                  <span class="dsp-icon">🛡️</span>
+                  <span class="dsp-card-title">True-Peak 브릭월 리미터</span>
+                </div>
+                <span class="dsp-tag rose">-1.0 dBTP / -14 LUFS</span>
+              </div>
+              <ul class="dsp-points-list">
+                <li><span>▪️</span> <span><strong>유튜브 표준 음압:</strong> 글로벌 스트리밍 규격(-14.0 LUFS) 자동 정규화</span></li>
+                <li><span>▪️</span> <span><strong>클리핑 왜곡 0% 차단:</strong> -1.0 dBTP 천장 제어로 손실 압축 시 음 깨짐 방지</span></li>
+                <li><span>▪️</span> <span><strong>음량 페널티 방지:</strong> 유튜브 알고리즘에 의한 강제 볼륨 감쇄 완벽 예방</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 07: Live Mastering A/B Deck (실제 A/B 청음 데크)
+           =================================================================== -->
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Live Demo • Core DSP Deck</div>
+            <h2 class="slide-title">실시간 A/B 마스터링 청음 데크</h2>
+            <p class="slide-subtitle">슬라이드 내부에 Web Audio DSP 엔진이 내장되어 있습니다. 버튼을 눌러 소리를 직접 비교해 보세요.</p>
+          </div>
+          <span class="slide-badge">실제 청음 데크</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="ab-deck-container">
+            <!-- Left: Spectrum & A/B Switch -->
+            <div class="glass-card ab-player-card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <h3 style="font-size:1.25rem; font-weight:800; color:#FFF;" id="currentTrackTitle">🎵 천천히 물들어 갈래 - june</h3>
+                  <p style="font-size:0.8rem; color:var(--text-muted);">JENT 스튜디오 64-bit 부동소수점 DSP 실시간 연산</p>
+                </div>
+                <button class="btn-interactive" id="playDeckBtn" style="padding:0.6rem 1.25rem;">
+                  ▶️ 청음 시작
+                </button>
+              </div>
+
+              <!-- 32-Band Visualizer Canvas -->
+              <canvas class="spectrum-canvas" id="spectrumCanvas" width="560" height="160"></canvas>
+
+              <!-- Large A/B Toggle Switch -->
+              <div class="ab-switch-row">
+                <button class="ab-switch-btn" id="abToggleBtn">
+                  <div class="toggle-capsule" id="toggleCapsule">
+                    <div class="toggle-thumb"></div>
+                  </div>
+                  <span class="ab-state-label" id="abLabelText">🔈 BYPASS (Suno 원본)</span>
+                </button>
+                <span style="font-size:0.8rem; color:var(--cyan); font-weight:600;">25ms 무클릭 A/B 크로스페이드</span>
+              </div>
+
+              <!-- Fallback HTML5 Native Audio Source (Local file:/// safe) -->
+              <audio id="deckAudioSource" preload="auto" loop style="display:none;">
+                <source src="assets/audio/demo.mp3" type="audio/mpeg">
+                <source src="assets/audio/demo.wav" type="audio/wav">
+              </audio>
+            </div>
+
+            <!-- Right: Real-time Audio Metrics & File Loader -->
+            <div class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <h4 style="font-size:1.05rem; font-weight:700; color:#FFF; margin-bottom:1rem;">실시간 스트리밍 음향 규격</h4>
+                <div class="meter-grid">
+                  <div class="metric-card">
+                    <span class="metric-title">통합 음압 (LUFS)</span>
+                    <span class="metric-value" id="lufsMetric">-18.4 LUFS</span>
+                    <span style="font-size:0.75rem; color:var(--text-dim); margin-top:0.25rem;">유튜브 기준: -14.0 LUFS</span>
+                  </div>
+
+                  <div class="metric-card">
+                    <span class="metric-title">트루 피크 (True Peak)</span>
+                    <span class="metric-value" id="truePeakMetric">-3.2 dB</span>
+                    <span style="font-size:0.75rem; color:var(--text-dim); margin-top:0.25rem;">리미터 천장: -1.0 dBTP</span>
+                  </div>
+
+                  <div class="metric-card">
+                    <span class="metric-title">스테레오 입체감</span>
+                    <span class="metric-value" id="widthMetric">100% (기본)</span>
+                    <span style="font-size:0.75rem; color:var(--text-dim); margin-top:0.25rem;">Mid/Side 3D 이미저</span>
+                  </div>
+
+                  <div class="metric-card">
+                    <span class="metric-title">새추레이션</span>
+                    <span class="metric-value" style="color:var(--emerald);">Soft Warmth</span>
+                    <span style="font-size:0.75rem; color:var(--text-dim); margin-top:0.25rem;">아날로그 테이프 질감</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Drag and drop another audio file -->
+              <div id="dropAudioZone" style="border:1px dashed var(--border-subtle); border-radius:0.75rem; padding:0.85rem; text-align:center; cursor:pointer; background:rgba(0,0,0,0.2);">
+                <span style="font-size:0.8rem; color:var(--text-muted);">📁 원하시는 다른 MP3/WAV 파일이 있다면 여기에 드래그 앤 드롭하세요</span>
+                <input type="file" id="audioFileInput" accept="audio/*" style="display:none;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 08: 0-Gap Playlist (0-Gap 무음 삭제 & 유튜브 챕터)
+           =================================================================== -->
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Core Engine 03</div>
+            <h2 class="slide-title">0-Gap 플레이리스트 병합 & 유튜브 챕터</h2>
+            <p class="slide-subtitle">수십 곡을 하나의 컴필레이션 앨범으로 묶고, 앞뒤 어색한 묵음 구간을 0.1초 만에 자동 삭제</p>
+          </div>
+          <button class="btn-interactive" id="copyChaptersBtn">
+            📋 유튜브 챕터 타임스탬프 복사
+          </button>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left Card: Realistic Waveform Comparison -->
+            <div class="glass-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                <h3 style="font-size:1.25rem; font-weight:800; color:#FFF;">✂️ 0-Gap 스마트 무음 트리밍</h3>
+                <span class="slide-badge" style="background:rgba(239,68,68,0.15); color:var(--rose); border-color:rgba(239,68,68,0.4);">
+                  -34dB 피크 이하 감지
+                </span>
+              </div>
+              <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.5;">
+                곡 앞뒤의 불필요한 공백을 자동 스캔하여 절삭하고, 5ms 마이크로 크로스페이드로 매끄럽게 연결합니다.
+              </p>
+
+              <div class="waveform-comparison">
+                <!-- Before: With Red Silence Gap -->
+                <div class="waveform-box before">
+                  <div class="waveform-box-header">
+                    <span class="waveform-status-tag bad">❌ 기존 방식: 곡 사이 어색한 침묵 방치</span>
+                    <span class="waveform-time-tag rose">⚠️ 2.8초 무음 (청취자 이탈 원인)</span>
+                  </div>
+                  <div class="waveform-canvas-wrap">
+                    <canvas id="beforeWaveCanvas" class="real-wave-canvas" width="600" height="90"></canvas>
+                  </div>
+                </div>
+
+                <!-- After: 0-Gap Seamless Splice -->
+                <div class="waveform-box after">
+                  <div class="waveform-box-header">
+                    <span class="waveform-status-tag good">✅ JENT STUDIO PRO: 묵음 자동 삭제 후 0-Gap 연결</span>
+                    <span class="waveform-time-tag cyan">⚡ 0.0초 딜레이 (무손실 크로스페이드)</span>
+                  </div>
+                  <div class="waveform-canvas-wrap">
+                    <canvas id="afterWaveCanvas" class="real-wave-canvas" width="600" height="90"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Card: YouTube Timestamps -->
+            <div class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                  <h3 style="font-size:1.25rem; font-weight:800; color:#FFF;">⏱️ 유튜브 챕터 텍스트 자동 발행</h3>
+                  <span class="slide-badge" style="background:rgba(0,240,255,0.15); color:var(--cyan); border-color:rgba(0,240,255,0.4);">
+                    Auto-Timestamps
+                  </span>
+                </div>
+                <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.5; margin-bottom:1rem;">
+                  병합 다운로드 완료와 동시에 유튜브 설명란에 그대로 붙여넣을 수 있는 <code style="color:var(--cyan); font-weight:700;">_Timestamps.txt</code>가 즉시 자동 생성됩니다.
+                </p>
+              </div>
+
+              <div style="background:rgba(0,0,0,0.55); border-radius:0.75rem; padding:1.25rem; font-size:1rem; color:var(--cyan); font-family:var(--font-mono); line-height:1.8; border:1px solid rgba(0,240,255,0.25); box-shadow:inset 0 2px 8px rgba(0,0,0,0.6);">
+                <div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:0.4rem; font-family:var(--font-sans);">📄 _Timestamps.txt 미리보기</div>
+                00:00 01. 천천히 물들어 갈래 - june<br>
+                01:50 02. 따뜻한 오후 햇살 - june<br>
+                04:22 03. 밤하늘 별빛 아래 - june
+              </div>
+
+              <div style="padding:0.9rem; background:rgba(255,255,255,0.03); border-radius:0.65rem; border:1px solid var(--border-subtle); display:flex; flex-direction:column; gap:0.4rem; font-size:0.85rem; color:var(--text-muted);">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span style="color:var(--emerald);">✓</span>
+                  <span><strong>30분 수작업 0초 단축:</strong> 타임코드를 일일이 적던 편집 노동 완전 제거</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span style="color:var(--cyan);">✓</span>
+                  <span><strong>알고리즘 챕터 UI 활성화:</strong> 검색 노출 및 유튜브 탐색 탭 점유율 2.5배 증가</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 09: AI Lyrics & Autofill (최신 AI 작사 & 원클릭 Auto-Fill)
+           =================================================================== -->
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Core Engine 04</div>
+            <h2 class="slide-title">최신 AI 실시간 작사 & 원클릭 Auto-Fill</h2>
+            <p class="slide-subtitle">스토리 기반 가사 생성 후 좌측 Suno Create 화면의 Custom 필드로 1초 만에 자동 주입</p>
+          </div>
+          <button class="btn-interactive" id="triggerAiAutofillBtn">
+            ✨ 최신 AI로 가사 & 스타일 만들기
+          </button>
+        </div>
+
+        <div class="slide-body">
+          <div class="autofill-preview-wrap">
+            <!-- Left: Suno Create Page Mockup -->
+            <div class="suno-mockup-window">
+              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:0.5rem;">
+                <span style="font-size:0.8rem; font-weight:700; color:#FFF;">suno.com / create (메인 화면)</span>
+                <span style="font-size:0.75rem; color:var(--emerald); font-weight:600;">Custom Mode ON</span>
+              </div>
+
+              <div class="mockup-input-group">
+                <span class="mockup-label">TITLE</span>
+                <input type="text" class="mockup-field" id="mockupTitle" readonly value="제목 입력 대기 중...">
+              </div>
+
+              <div class="mockup-input-group">
+                <span class="mockup-label">STYLE OF MUSIC</span>
+                <input type="text" class="mockup-field" id="mockupStyle" readonly value="스타일 태그 대기 중...">
+              </div>
+
+              <div class="mockup-input-group">
+                <span class="mockup-label">LYRICS</span>
+                <textarea class="mockup-field" id="mockupLyrics" rows="4" readonly style="resize:none;">가사 대기 중...</textarea>
+              </div>
+            </div>
+
+            <!-- Right: SidePanel Feature Desc -->
+            <div class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between; border-color:var(--border-accent);">
+              <div>
+                <h4 style="font-size:1.15rem; font-weight:700; color:#FFF; margin-bottom:0.5rem;">미친감성 작사 역학 공식 탑재</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">
+                  단순한 가사가 아닙니다. 벌스는 7~8자로 절제하여 보컬 웅얼거림을 없애고, 후렴 진입 시 11자에서 3자로 급강하(🔻)시켜 폭발적인 킬링 훅을 유도합니다.
+                </p>
+              </div>
+
+              <div style="padding:0.85rem; background:rgba(0,0,0,0.3); border-radius:0.5rem; font-size:0.82rem; color:var(--cyan);">
+                🚀 가사 생성과 동시에 좌측 Suno 입력창으로 실시간 전송되어 복사/붙여넣기조차 필요 없습니다.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 10: Future Roadmap & Q&A (정식 출시 로드맵 & Q&A)
+           =================================================================== -->
+      <section class="slide" id="slide-10">
+        <div class="hero-content">
+          <div class="hero-pill" style="border-color:rgba(168,85,247,0.4); color:var(--purple); background:rgba(168,85,247,0.1);">
+            <span>🚀</span> NEXT-GEN STUDIO ROADMAP
+          </div>
+          <h2 class="hero-title" style="font-size:3.2rem;">
+            더욱 완벽한 프로페셔널 스튜디오로<br>
+            <span class="gradient-text">완성형 프로 에디션 정식 릴리즈 예정</span>
+          </h2>
+          <p class="hero-desc">
+            오늘 배포해 드린 무료 에디션으로 충분히 작업 속도를 올리신 후,<br>
+            더 큰 스케일의 대량 창작과 완벽한 상업 음원 출시를 위한 PRO 버전을 기대해 주세요!
+          </p>
+
+          <div style="display:flex; gap:1.5rem; margin-top:0.75rem;">
+            <div class="glass-card" style="padding:1.5rem 2.5rem; text-align:center; border-color:var(--purple);">
+              <div style="font-size:2rem; margin-bottom:0.5rem;">⚡</div>
+              <div style="font-size:1.15rem; font-weight:800; color:var(--purple);">PRO 완성형 정식 릴리즈</div>
+              <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">기능 고도화 및 최종 안정화 후 순차적 공개</div>
+            </div>
+
+            <div class="glass-card" style="padding:1.5rem 2.5rem; text-align:center;">
+              <div style="font-size:2rem; margin-bottom:0.5rem;">💬</div>
+              <div style="font-size:1.15rem; font-weight:800; color:#FFF;">현장 Q&A 및 피드백</div>
+              <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">PRO 기능에 바라는 점이나 질문을 편하게 말씀해 주세요!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Bottom Presenter HUD -->
+  <footer class="presenter-hud">
+    <a href="index.html" class="hud-btn" id="hudHome" title="프레젠테이션 셀렉터 허브로 돌아가기" style="text-decoration:none; color:inherit; display:flex; align-items:center; justify-content:center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    </a>
+    <div style="width:1px; height:18px; background:rgba(255,255,255,0.15);"></div>
+    <button class="hud-btn" id="hudPrev" title="이전 슬라이드 (←, PageUp)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <span class="hud-slide-counter" id="slideCounter">01 / 10</span>
+    <button class="hud-btn" id="hudNext" title="다음 슬라이드 (→, Space, PageDown)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+    <div style="width:1px; height:18px; background:rgba(255,255,255,0.15);"></div>
+    <button class="hud-btn" id="hudOverview" title="전체 슬라이드 보기 (ESC)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+    </button>
+    <button class="hud-btn" id="hudNotes" title="발표자 스크립트 메모 (N)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+    </button>
+    <button class="hud-btn" id="hudFullscreen" title="전체화면 토글 (F)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+    </button>
+  </footer>
+
+  <!-- Presenter Notes Drawer (Press 'N') -->
+  <aside class="notes-drawer" id="notesDrawer">
+    <div class="notes-header">
+      <span class="notes-title">🎙️ [프로 에디션] 발표자 진행 큐시트 (단축키: N)</span>
+      <button id="notesCloseBtn" style="background:none; border:none; color:var(--text-muted); cursor:pointer;">✕</button>
+    </div>
+    <div class="notes-content" id="notesContent">
+      발표 메모를 로드하는 중입니다...
+    </div>
+  </aside>
+
+  <!-- Slide Overview Modal (Press 'ESC') -->
+  <div class="overview-modal" id="overviewModal">
+    <div style="display:flex; justify-content:space-between; align-items:center; max-width:1400px; margin:0 auto;">
+      <h3 style="font-size:1.6rem; font-weight:800; color:#FFF;">[프로 에디션] 전체 슬라이드 네비게이터</h3>
+      <button id="overviewCloseBtn" style="background:none; border:1px solid var(--border-subtle); color:#FFF; padding:0.4rem 0.8rem; border-radius:6px; cursor:pointer;">닫기 (ESC)</button>
+    </div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" style="position:fixed; bottom:5rem; left:50%; transform:translate(-50%, 15px); background:rgba(0,240,255,0.9); color:#000; padding:0.65rem 1.25rem; border-radius:9999px; font-weight:700; font-size:0.85rem; box-shadow:0 10px 25px rgba(0,240,255,0.4); opacity:0; transition:all 0.25s ease; pointer-events:none; z-index:300;"></div>
+
+  <!-- Zero-CORS Pre-embedded Studio Audio Data (Supports file:/// direct double-click) -->
+  <script src="assets/audio/demo_data.js"></script>
+  <script src="pro.js"></script>
+</body>
+</html>

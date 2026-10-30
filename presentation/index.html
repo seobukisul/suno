@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JENT STUDIO — 프레젠테이션 셀렉터 허브</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .hub-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      z-index: 10;
+      position: relative;
+    }
+    .hub-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .hub-title {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, #FFFFFF 30%, #94A3B8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hub-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+    }
+    .deck-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      max-width: 1080px;
+      width: 100%;
+    }
+    .deck-select-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+    .deck-select-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--cyan);
+      box-shadow: 0 20px 40px rgba(0, 240, 255, 0.15);
+    }
+    .deck-select-card.pro-card:hover {
+      border-color: var(--purple);
+      box-shadow: 0 20px 40px rgba(168, 85, 247, 0.15);
+    }
+    .deck-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      width: fit-content;
+    }
+    .deck-badge.free {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--emerald);
+    }
+    .deck-badge.pro {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: var(--purple);
+    }
+    .deck-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #FFF;
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+    .deck-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+    }
+    .deck-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      font-size: 0.9rem;
+      color: #CBD5E1;
+      margin-bottom: 2rem;
+    }
+    .deck-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .deck-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 800;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+    .deck-btn.free {
+      background: linear-gradient(135deg, var(--cyan), var(--emerald));
+      color: #000;
+    }
+    .deck-btn.pro {
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      color: #000;
+    }
+    .hub-footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+    .hub-top-nav {
+      position: absolute;
+      top: 1.5rem;
+      left: 2rem;
+      z-index: 50;
+    }
+    .hub-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.15rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #CBD5E1;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(16px);
+      text-decoration: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    .hub-back-btn:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--cyan);
+      color: #FFF;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+      transform: translateX(-3px);
+    }
+    @media (max-width: 768px) {
+      .hub-top-nav {
+        position: static;
+        margin-bottom: 1.5rem;
+      }
+      .deck-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .hub-title {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Light Effects -->
+  <div class="ambient-glow"></div>
+
+  <div class="hub-container">
+    <div class="hub-top-nav">
+      <a href="../index.html" class="hub-back-btn">
+        <span style="font-size: 1rem;">🏠</span>
+        <span>JENT STUDIO 웹 메인으로 돌아가기</span>
+      </a>
+    </div>
+
+    <header class="hub-header">
+      <div class="hero-pill" style="border-color:rgba(0,240,255,0.4); background:rgba(0,240,255,0.1); color:var(--cyan); margin-bottom:1rem;">
+        🎙️ JENT STUDIO PRESENTATION HUB
+      </div>
+      <h1 class="hub-title">발표 덱 선택 (Presentation Selector)</h1>
+      <p class="hub-subtitle">발표 목적과 대상 청중에 맞추어 원하는 프레젠테이션을 선택하세요.</p>
+    </header>
+
+    <div class="deck-cards-grid">
+      <!-- Card 1: Free Deck -->
+      <a href="free.html" class="deck-select-card">
+        <div>
+          <span class="deck-badge free">🎁 MAIN TOPIC • 수강생 선물</span>
+          <h2 class="deck-title">프리 버전 발표 덱<br><span style="color:var(--cyan);">(무제한 녹음 다운로더)</span></h2>
+          <p class="deck-desc">
+            Suno 다운로드 제한을 역대급 기회로 바꾸는 핵심 발표! 픽미 수강생 전원 무료 배포, 100% 사운드 격리 기술 및 1분 설치 & 실전 사용 가이드.
+          </p>
+          <ul class="deck-features">
+            <li><span>🚨</span> <strong>Suno 플랜별 다운로드 족쇄 & 시장 기회</strong></li>
+            <li><span>🎁</span> <strong>픽미 수강생 독점 무제한 무손실 다운로더 배포</strong></li>
+            <li><span>🛡️</span> <strong>100% 사운드 격리 라이브 소음(카톡) 주입 데모</strong></li>
+            <li><span>🚀</span> <strong>1분 완성 브라우저 설치법 & 원클릭 다운로드</strong></li>
+          </ul>
+        </div>
+        <div class="deck-btn free">
+          ▶️ 프리 버전 발표 시작하기 (단축키: 1)
+        </div>
+      </a>
+
+      <!-- Card 2: Pro Deck -->
+      <a href="pro.html" class="deck-select-card pro-card">
+        <div>
+          <span class="deck-badge pro">⚡ ADVANCED SUITE • 기능 설명 위주</span>
+          <h2 class="deck-title">프로 버전 발표 덱<br><span style="color:var(--purple);">(올인원 스튜디오 스위트)</span></h2>
+          <p class="deck-desc">
+            차세대 올인원 프로페셔널 스위트! 1.5초 무음 병렬 추출, 스튜디오 DSP 마스터링 A/B 실시간 청음 및 최신 AI 작사 Auto-Fill.
+          </p>
+          <ul class="deck-features">
+            <li><span>🎛️</span> <strong>브라우저 네이티브 SidePanel 밀착 도킹 스위트</strong></li>
+            <li><span>⚡</span> <strong>1.5초 무음 병렬 다운로드 120배 고속 레이스 데모</strong></li>
+            <li><span>🎚️</span> <strong>-14 LUFS 스튜디오 DSP 마스터링 실시간 A/B 청음</strong></li>
+            <li><span>✂️</span> <strong>0-Gap 플레이리스트 병합 & 최신 AI 작사 Auto-Fill</strong></li>
+          </ul>
+        </div>
+        <div class="deck-btn pro">
+          ▶️ 프로 버전 발표 시작하기 (단축키: 2)
+        </div>
+      </a>
+    </div>
+
+    <footer class="hub-footer">
+      <div>💡 <strong>단축키 안내:</strong> 키보드 숫자 <code>[1]</code>을 누르면 프리 버전, <code>[2]</code>를 누르면 프로 버전으로 즉시 진입합니다.</div>
+      <div style="margin-top:0.4rem;">각 발표 덱 내에서 <code>[F]</code> 전체화면, <code>[N]</code> 발표자 큐시트, <code>[ESC]</code> 오버뷰 네비게이터를 지원합니다.</div>
+    </footer>
+  </div>
+
+  <script>
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '1') {
+        window.location.href = 'free.html';
+      } else if (e.key === '2') {
+        window.location.href = 'pro.html';
+      }
+    });
+  </script>
+</body>
+</html>

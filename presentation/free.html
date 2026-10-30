@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JENT STUDIO — 무료 에디션 (무제한 다운로더 발표용)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800;900&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient Light Effects -->
+  <div class="ambient-glow"></div>
+
+  <!-- =========================================================================
+       Cinematic NanoBanana Treasure Chest Opening Overlay
+       ========================================================================= -->
+  <div class="chest-intro-overlay" id="chestIntroOverlay">
+    <!-- Volumetric God Rays -->
+    <div class="chest-god-rays" id="chestGodRays"></div>
+
+    <!-- Screen Flash Burst Effect -->
+    <div class="chest-flash-burst" id="chestFlashBurst"></div>
+
+    <!-- Interactive Particle Explosion Canvas -->
+    <canvas class="chest-particle-canvas" id="chestParticleCanvas"></canvas>
+
+    <!-- Skip Button (ESC or Click) -->
+    <button class="chest-skip-btn" id="skipChestBtn">건너뛰기 (ESC)</button>
+
+    <!-- Chest 3D Stage -->
+    <div class="chest-stage-container" id="chestStageContainer">
+      <div class="chest-ambient-aura"></div>
+      <img src="assets/images/chest_closed.png" alt="보물상자 (닫힘)" class="chest-img chest-closed" id="chestClosedImg">
+      <img src="assets/images/chest_open.png" alt="보물상자 (열림)" class="chest-img chest-open" id="chestOpenImg">
+
+      <div class="chest-cta-wrap" id="chestCtaWrap">
+        <button class="chest-open-btn" id="openChestBtn">
+          <span class="chest-btn-icon">✨</span>
+          <span>선물보따리 열기 (PANG!)</span>
+          <span class="chest-btn-key">SPACE</span>
+        </button>
+        <span class="chest-hint">클릭하거나 스페이스바를 눌러 보물상자를 여세요</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Presentation 16:9 Viewport -->
+  <main id="presentation-viewport">
+    <div class="slide-deck">
+
+      <!-- ===================================================================
+           Slide 01: Hook & Shock (수노 다운로드 제한 훅)
+           =================================================================== -->
+      <section class="slide active" id="slide-1">
+        <button class="btn-replay-opening" id="replayOpeningBtn" title="보물상자 오프닝 다시보기">
+          <span>🎁</span> 보물상자 오프닝 다시보기
+        </button>
+        <div class="hero-content">
+          <div class="hero-pill" style="background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.5); color: #FDA4AF;">
+            <span>🚨</span> AI 음악 시장 긴급 브리핑
+          </div>
+          <h1 class="hero-title" style="font-size: 3.8rem;">
+            수노의 다운로드 97% 급감,<br>
+            <span class="gradient-text">우리에게 역대급 기회가 열렸다!</span>
+          </h1>
+          <p class="hero-desc">
+            양산형 자동화 봇 채널의 전멸 ➔ <strong style="color:var(--cyan); font-weight:900;">픽미 수강생 독점 무제한 다운로더</strong> 전격 배포!
+          </p>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-num" style="color:var(--rose);">-97%</span>
+              <span class="stat-label">Suno 일반 다운로드 공급 축소</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num" style="color:var(--amber);">47억 뷰 퇴출</span>
+              <span class="stat-label">유튜브 양산형 AI 채널 대숙청</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num" style="color:var(--cyan);">무제한 0원</span>
+              <span class="stat-label">픽미 수강생 독점 해금</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 02: Suno Policy Shock (수노 9.3 공급 차단 팩트 수치)
+           =================================================================== -->
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Fact Check 01 • Suno Policy</div>
+            <h2 class="slide-title">수노(Suno) 공급 원천 차단: 추출 물량 97% 급감</h2>
+            <p class="slide-subtitle">9월 3일 정책 시행 후 수노의 일반 다운로드 한도 실태</p>
+          </div>
+          <span class="slide-badge">공식 정책 분석</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="glass-card" style="border-top:5px solid var(--rose);">
+              <div style="font-size:1.8rem; font-weight:900; color:var(--rose); margin-bottom:0.5rem;">Free (무료)</div>
+              <h3 class="card-title">평생 총 7곡 한도</h3>
+              <p class="card-desc">
+                월 리셋 없음. 계정 생성 후 7곡 받으면 영구 다운로드 불가!<br>
+                <strong style="color:var(--rose);">➔ 사실상 100% 완전 차단</strong>
+              </p>
+              <div class="card-impact">무료 계정 다운로드 전멸</div>
+            </div>
+
+            <div class="glass-card" style="border-top:5px solid var(--amber);">
+              <div style="font-size:1.8rem; font-weight:900; color:var(--amber);">Pro ($10/월)</div>
+              <h3 class="card-title">월 20곡 제한 (-96%)</h3>
+              <p class="card-desc">
+                월 500곡 생성 가능하나, 일반 다운로드는 한 달에 단 20곡만 허용!<br>
+                <strong style="color:var(--amber);">➔ 1시간 플리 1개 만들면 끝</strong>
+              </p>
+              <div class="card-impact" style="background:rgba(245,158,11,0.15); color:#FCD34D;">기존 대비 96% 공급 축소</div>
+            </div>
+
+            <div class="glass-card" style="border-top:5px solid var(--purple);">
+              <div style="font-size:1.8rem; font-weight:900; color:var(--purple);">Premier ($30/월)</div>
+              <h3 class="card-title">월 60곡 제한 (-97%)</h3>
+              <p class="card-desc">
+                월 2,000곡을 뽑아도 일반 다운로드는 월 60곡으로 묶임!<br>
+                <strong style="color:var(--purple);">➔ 자동화 스크립트 봇 전면 무력화</strong>
+              </p>
+              <div class="card-impact" style="background:rgba(168,85,247,0.15); color:#D8B4FE;">공장형 파이프라인 붕괴</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 03: YouTube Market Shift (유튜브 AI 스팸 채널 대숙청)
+           =================================================================== -->
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Fact Check 02 • YouTube Ecosystem</div>
+            <h2 class="slide-title">유튜브의 대숙청: 양산형 봇 채널의 몰락</h2>
+            <p class="slide-subtitle">정지 이미지 1장에 기계적 AI 음원 나열 ➔ YPP 수익 창출 영구 퇴출</p>
+          </div>
+          <span class="slide-badge">플랫폼 제재 현황</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="glass-card">
+              <div style="font-size:2.4rem; margin-bottom:0.75rem;">🤖</div>
+              <h3 class="card-title">일일 75,000곡 중 85% 가짜</h3>
+              <p class="card-desc">
+                Deezer 통계: 신규 음원의 50%가 AI 스팸이었으나, 실제 청취의 <strong>85%가 사기 봇 트래픽</strong>으로 정산 전면 동결!
+              </p>
+            </div>
+
+            <div class="glass-card" style="border-color:var(--rose);">
+              <div style="font-size:2.4rem; margin-bottom:0.75rem;">🚫</div>
+              <h3 class="card-title">47억 뷰 16개 대형 채널 퇴출</h3>
+              <p class="card-desc">
+                유튜브의 '비진정성 저품질 AI(Slop)' 단속으로 연간 135억 수익을 올리던 <strong>공장형 채널들이 한 번에 영구 삭제!</strong>
+              </p>
+            </div>
+
+            <div class="glass-card" style="border-color:var(--cyan); background:rgba(0,240,255,0.04);">
+              <div style="font-size:2.4rem; margin-bottom:0.75rem;">👑</div>
+              <h3 class="card-title" style="color:var(--cyan);">10월 규정: 인간 큐레이션 독점</h3>
+              <p class="card-desc">
+                유튜브의 10월 AI 음악 의무 라벨링 도입으로, <strong>제대로 기획하고 다듬는 픽미 창작자가 트래픽을 독점</strong>하는 황금기!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 04: The Bottleneck (다운로드 족쇄 극복 필요성)
+           =================================================================== -->
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">The Real Challenge</div>
+            <h2 class="slide-title">하지만... 여전히 남은 치명적인 제약</h2>
+            <p class="slide-subtitle">"월 20곡, 60곡으로는 내 마음대로 음원을 테스트하고 소장할 수 없다!"</p>
+          </div>
+          <span class="slide-badge">창작자의 딜레마</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="glass-card" style="border-color:rgba(244,63,94,0.5);">
+              <h3 style="font-size:1.6rem; font-weight:800; color:var(--rose); margin-bottom:1.25rem;">❌ 수노 유료 결제자도 겪는 현실</h3>
+              <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.25rem; line-height:1.6; color:#E2E8F0;">
+                <div><strong style="color:var(--rose);">1. 한 달 20곡 한계:</strong> 1시간 플리 1개 만들면 다운로드 쿼터 증발</div>
+                <div><strong style="color:var(--rose);">2. 무료 계정 영구 차단:</strong> 평생 7곡 이후 다운로드 완전 불가</div>
+                <div><strong style="color:var(--rose);">3. 일반 녹음기 오염:</strong> 화면 녹음 시 카톡 소리·컴퓨터 잡음 혼입</div>
+              </div>
+            </div>
+
+            <div class="glass-card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; border-color:var(--border-accent); background:rgba(0,240,255,0.05);">
+              <div style="font-size:3.5rem; margin-bottom:1rem;">🎁</div>
+              <h3 style="font-size:1.85rem; font-weight:900; color:#FFF; margin-bottom:0.75rem; line-height:1.35;">
+                만약 플랜 상관없이,<br>
+                <span style="color:var(--cyan);">무제한 100% 무손실 다운로드</span>가 된다면?
+              </h3>
+              <p style="font-size:1.25rem; color:var(--text-muted); line-height:1.6; max-width:480px;">
+                월 20곡 제한 0, 크레딧 차감 0, 깨끗한 오리지널 스튜디오 원음 그대로 평생 소장!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 05: The Secret Gift (선물보따리 공개)
+           =================================================================== -->
+      <section class="slide" id="slide-5">
+        <div class="hero-content">
+          <div class="hero-pill" style="background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.5); color:var(--emerald);">
+            <span>🎉</span> 픽미 수강생 여러분만을 위한 특급 선물
+          </div>
+          <h2 class="hero-title" style="font-size:3.6rem;">
+            JENT STUDIO 무료 에디션<br>
+            <span class="gradient-text">무제한 무손실 다운로더 전격 배포!</span>
+          </h2>
+          <p class="hero-desc" style="font-size:1.55rem;">
+            오늘 참석하신 픽미 수강생 여러분 모두에게 <strong style="color:#FFF; font-weight:900;">평생 100% 무료</strong>로 제공됩니다.<br>
+            유료 계정이든, 무료 계정이든 상관없이 지금 즉시 무제한 다운로드를 해금하세요.
+          </p>
+
+          <div class="grid-3" style="width:100%; max-width:1080px; margin-top:1.5rem;">
+            <div class="glass-card" style="padding:1.75rem; text-align:center; border-color:var(--cyan);">
+              <div style="font-size:1.85rem; color:var(--cyan); font-weight:900; margin-bottom:0.5rem;">무제한 다운로드</div>
+              <p style="font-size:1.15rem; color:var(--text-muted);">월 20곡 제약 완전 해제 • 크레딧 0 소모</p>
+            </div>
+            <div class="glass-card" style="padding:1.75rem; text-align:center; border-color:var(--emerald);">
+              <div style="font-size:1.85rem; color:var(--emerald); font-weight:900; margin-bottom:0.5rem;">16-bit 무손실 WAV</div>
+              <p style="font-size:1.15rem; color:var(--text-muted);">손실 없는 스튜디오 오리지널 원음</p>
+            </div>
+            <div class="glass-card" style="padding:1.75rem; text-align:center; border-color:var(--purple);">
+              <div style="font-size:1.85rem; color:var(--purple); font-weight:900; margin-bottom:0.5rem;">100% 사운드 격리</div>
+              <p style="font-size:1.15rem; color:var(--text-muted);">외부 카톡/알림음 소음 0.0dB 차단</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 06: Sound Isolation & Live Demo (사운드 격리 & 가상 소음 데모)
+           =================================================================== -->
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Live Interactive Demo</div>
+            <h2 class="slide-title">100% 사운드 격리 기술 & 실시간 소음 테스트</h2>
+            <p class="slide-subtitle">OS 사운드카드 믹서 우회! 녹음 중 카톡 소리가 울려도 0.0dB로 완전 차단됩니다.</p>
+          </div>
+          <div style="display:flex; gap:0.75rem; align-items:center;">
+            <button class="btn-interactive" id="triggerNoiseBtn" style="padding:0.95rem 1.6rem; font-size:1.2rem; background:linear-gradient(135deg, #00F0FF, #A855F7); color:#FFF; box-shadow:0 8px 25px rgba(0,240,255,0.35);">
+              💬 "카톡!" 알림음 발생
+            </button>
+            <button class="btn-interactive" id="triggerKakaotalkBtn" style="padding:0.95rem 1.6rem; font-size:1.2rem; background:linear-gradient(135deg, #FEE500, #F59E0B); color:#1E1E1E; font-weight:800; box-shadow:0 8px 25px rgba(254,229,0,0.35);">
+              💬 "카카오톡!" 알림음 발생
+            </button>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="glass-card">
+              <div style="font-size:1.1rem; color:var(--rose); font-weight:800; margin-bottom:0.75rem;">❌ 일반 화면 녹음기 (스테레오 믹스)</div>
+              <h3 style="font-size:1.5rem; font-weight:800; color:#FFF;">외부 소음 100% 혼입 오염</h3>
+              
+              <div class="meter-box">
+                <div class="meter-label-row">
+                  <span>녹음 신호 상태</span>
+                  <span id="normalNoiseStatus" style="color:var(--text-dim); font-size:1.15rem;">대기 중</span>
+                </div>
+                <div class="meter-track">
+                  <div class="meter-fill" id="normalNoiseFill" style="width: 25%;"></div>
+                </div>
+              </div>
+              <p style="font-size:1.15rem; color:var(--text-dim); margin-top:1rem;">카톡, 디스코드 알림음이 음악에 섞여 음원이 영구 손상됩니다.</p>
+            </div>
+
+            <div class="glass-card" style="border-color: rgba(16, 185, 129, 0.5);">
+              <div style="font-size:1.1rem; color:var(--emerald); font-weight:800; margin-bottom:0.75rem;">✅ JENT STUDIO (Web Audio Graph 직결)</div>
+              <h3 style="font-size:1.5rem; font-weight:800; color:#FFF;">외부 소음 0.0 dB 완전 차단</h3>
+              
+              <div class="meter-box">
+                <div class="meter-label-row">
+                  <span>순수 음원 격리도</span>
+                  <span id="jentNoiseStatus" style="color:var(--emerald); font-size:1.15rem;">100% 순수 원음 유지</span>
+                </div>
+                <div class="meter-track">
+                  <div class="meter-fill good" id="jentNoiseFill" style="width: 10%;"></div>
+                </div>
+              </div>
+              <p style="font-size:1.15rem; color:var(--text-dim); margin-top:1rem;">브라우저 내부 오디오 메모리 직결로 밖에서 소리가 나도 100% 깨끗!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 07: 1-Minute Installation (1분 완성 브라우저 설치법)
+           =================================================================== -->
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">User Guide • Step 1</div>
+            <h2 class="slide-title">1분 완성 초간단 설치 가이드</h2>
+            <p class="slide-subtitle">네이버 웨일 및 구글 크롬에서 복잡한 설정 없이 1분 만에 설치 완료</p>
+          </div>
+          <span class="slide-badge">무설치급 간편함</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="glass-card">
+              <div style="font-size:2.2rem; font-weight:900; color:var(--cyan); margin-bottom:0.5rem;">STEP 1</div>
+              <h3 class="card-title">웹사이트 접속 & 다운</h3>
+              <p class="card-desc">
+                공식 배포 웹페이지에 접속하여 ZIP 다운로드:<br>
+                <a href="https://sunodown.vercel.app" target="_blank" style="color:var(--cyan); font-weight:900; font-size:1.3rem; text-decoration:underline;">sunodown.vercel.app</a>
+              </p>
+            </div>
+
+            <div class="glass-card">
+              <div style="font-size:2.2rem; font-weight:900; color:var(--emerald); margin-bottom:0.5rem;">STEP 2</div>
+              <h3 class="card-title">개발자 모드 켜기</h3>
+              <p class="card-desc">
+                주소창에 <code style="color:var(--cyan); font-size:1.15rem;">whale://extensions</code><br>또는 <code style="color:var(--cyan); font-size:1.15rem;">chrome://extensions</code> 입력 후 우측 상단 <strong>[개발자 모드]</strong> ON!
+              </p>
+            </div>
+
+            <div class="glass-card">
+              <div style="font-size:2.2rem; font-weight:900; color:var(--purple); margin-bottom:0.5rem;">STEP 3</div>
+              <h3 class="card-title">폴더 선택 ➔ 설치 끝!</h3>
+              <p class="card-desc">
+                좌측 상단의 <strong>[압축해제된 확장앱 설치]</strong> 클릭 후 압축 푼 폴더를 지정하면 즉시 사용 가능!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 08: Real-World Usage (실전 원클릭 다운로드 사용법)
+           =================================================================== -->
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">User Guide • Step 2</div>
+            <h2 class="slide-title">실전 원클릭 다운로드 사용법</h2>
+            <p class="slide-subtitle">Suno 플레이어 바 바로 옆에서 클릭 한 번으로 무손실 음원을 다운로드합니다.</p>
+          </div>
+          <span class="slide-badge">원클릭 UI</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <div class="glass-card" style="display:flex; flex-direction:column; justify-content:center;">
+              <h3 style="font-size:1.6rem; font-weight:800; color:#FFF; margin-bottom:1.25rem;">실전 워크플로우 3단계</h3>
+              <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.25rem; color:#E2E8F0; line-height:1.6;">
+                <div><strong>1. suno.com 접속:</strong> 원하는 곡을 검색하거나 재생합니다.</div>
+                <div><strong>2. 하단 플레이어 확인:</strong> 왼쪽 곡 제목 바로 옆 버튼 확인!</div>
+                <div><strong>3. 버튼 원클릭:</strong> <strong style="color:var(--cyan);">[💾 WAV]</strong> 또는 <strong style="color:var(--emerald);">[🎵 MP3]</strong> 누르면 즉시 다운로드 완료!</div>
+              </div>
+            </div>
+
+            <div class="glass-card" style="border-color:var(--border-accent); background:rgba(0,240,255,0.04); display:flex; flex-direction:column; justify-content:center;">
+              <h4 style="font-size:1.4rem; font-weight:800; color:var(--cyan); margin-bottom:1rem;">💡 2대 제공 포맷 안내</h4>
+              <div style="display:flex; flex-direction:column; gap:1rem; font-size:1.2rem; color:#CBD5E1; line-height:1.6;">
+                <div>• <strong style="color:#FFF;">[💾 WAV] 16-bit 무손실:</strong> 압축 손실 없는 순수 원음 파형 (유튜브 및 음원 유통용)</div>
+                <div>• <strong style="color:#FFF;">[🎵 MP3] 320k 최고음질:</strong> 가볍고 편리한 고품질 음원 (차량 및 모바일용)</div>
+              </div>
+              <div style="margin-top:1.5rem; padding:0.85rem 1.25rem; background:rgba(16,185,129,0.15); border-radius:0.75rem; font-size:1.15rem; color:var(--emerald); font-weight:800;">
+                🎯 유/무료 상관없이 100% 무제한 평생 사용 가능!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 09: Lossless Value (무손실 WAV의 가치)
+           =================================================================== -->
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div>
+            <div class="slide-category">Audio Quality Standard</div>
+            <h2 class="slide-title">왜 무손실 16-bit WAV를 소장해야 하는가?</h2>
+            <p class="slide-subtitle">유튜브 압축 손실 방지 및 정식 음원 유통사 규격을 100% 충족하는 기준</p>
+          </div>
+          <span class="slide-badge">음질 경쟁력</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="glass-card">
+              <div style="font-size:2.4rem; margin-bottom:0.75rem;">💎</div>
+              <h3 class="card-title">초고역대 컷오프 제로</h3>
+              <p class="card-desc">
+                MP3가 16kHz 이상 고역대를 깎아먹는 반면, 무손실 WAV는 <strong>20kHz 풀 레인지</strong>를 100% 보존합니다.
+              </p>
+            </div>
+
+            <div class="glass-card">
+              <div style="font-size:2.4rem; margin-bottom:0.75rem;">📺</div>
+              <h3 class="card-title">유튜브 재압축 방어</h3>
+              <p class="card-desc">
+                유튜브 영상 제작 시 MP3를 넣으면 소리가 뭉개지지만, <strong>WAV 원음을 넣으면 최고 음질이 유지</strong>됩니다.
+              </p>
+            </div>
+
+            <div class="glass-card">
+              <div style="font-size:2.4rem; margin-bottom:0.75rem;">🚀</div>
+              <h3 class="card-title">글로벌 유통사 정규 규격</h3>
+              <p class="card-desc">
+                스포티파이, 멜론 등 정규 음원 유통사에 제출 가능한 <strong>44.1kHz 16-bit Linear PCM</strong> 표준 완벽 충족!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           Slide 10: Call to Action (대형 주소 배너 & 즉시 다운로드)
+           =================================================================== -->
+      <section class="slide" id="slide-10">
+        <div class="hero-content">
+          <div class="hero-pill" style="border-color:rgba(16,185,129,0.5); color:var(--emerald); background:rgba(16,185,129,0.15);">
+            <span>🎁</span> SPECIAL PRESENT FOR PICK ME STUDENTS
+          </div>
+          <h2 class="hero-title" style="font-size:3.5rem; margin-bottom:0.5rem;">
+            지금 바로 무료로 다운로드 받으세요!
+          </h2>
+          <p class="hero-desc" style="font-size:1.4rem; margin-bottom:1rem;">
+            더 이상 수노의 월 20곡 다운로드 제한에 갇히지 마세요. 지금 브라우저에서 바로 접속하세요!
+          </p>
+
+          <!-- Massive Glowing URL Box (멀리서도 뚜렷하게 보이는 대형 주소) -->
+          <div class="big-download-banner">
+            <span class="big-download-tag">📥 무료 에디션 공식 다운로드 웹사이트</span>
+            <a href="https://sunodown.vercel.app" target="_blank" class="glow-url-link">
+              🔗 https://sunodown.vercel.app
+            </a>
+            <span class="big-download-sub">👆 클릭하시거나 주소창에 위 주소를 입력하여 확장앱 ZIP 파일을 즉시 다운로드하세요!</span>
+          </div>
+
+          <div style="display:flex; gap:2rem; width:100%; max-width:960px;">
+            <div class="glass-card" style="flex:1; padding:1.5rem; text-align:center; border-color:var(--cyan);">
+              <div style="font-size:1.35rem; font-weight:800; color:var(--cyan); margin-bottom:0.25rem;">⚡ 1분 초간단 설치</div>
+              <div style="font-size:1.1rem; color:var(--text-muted);">ZIP 다운로드 ➔ 압축 해제 ➔ 브라우저 확장앱 등록 즉시 끝!</div>
+            </div>
+
+            <div class="glass-card" style="flex:1; padding:1.5rem; text-align:center; border-color:var(--emerald);">
+              <div style="font-size:1.35rem; font-weight:800; color:var(--emerald); margin-bottom:0.25rem;">💬 현장 실습 & Q&A</div>
+              <div style="font-size:1.1rem; color:var(--text-muted);">지금 바로 설치하시고 첫 번째 곡을 무손실로 뽑아보세요!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Bottom Presenter HUD -->
+  <footer class="presenter-hud">
+    <a href="index.html" class="hud-btn" id="hudHome" title="프레젠테이션 셀렉터 허브로 돌아가기" style="text-decoration:none; color:inherit; display:flex; align-items:center; justify-content:center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    </a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <button class="hud-btn" id="hudPrev" title="이전 슬라이드 (←, PageUp)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <span class="hud-slide-counter" id="slideCounter">01 / 10</span>
+    <button class="hud-btn" id="hudNext" title="다음 슬라이드 (→, Space, PageDown)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <button class="hud-btn" id="hudOverview" title="전체 슬라이드 보기 (ESC)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+    </button>
+    <button class="hud-btn" id="hudNotes" title="발표자 스크립트 메모 (N)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+    </button>
+    <button class="hud-btn" id="hudFullscreen" title="전체화면 토글 (F)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+    </button>
+  </footer>
+
+  <!-- Presenter Notes Drawer (Press 'N') -->
+  <aside class="notes-drawer" id="notesDrawer">
+    <div class="notes-header">
+      <span class="notes-title">🎙️ [무료 에디션] 발표자 진행 큐시트 (단축키: N)</span>
+      <button id="notesCloseBtn" style="background:none; border:none; color:var(--text-muted); cursor:pointer;">✕</button>
+    </div>
+    <div class="notes-content" id="notesContent">
+      발표 메모를 로드하는 중입니다...
+    </div>
+  </aside>
+
+  <!-- Slide Overview Modal (Press 'ESC') -->
+  <div class="overview-modal" id="overviewModal">
+    <div style="display:flex; justify-content:space-between; align-items:center; max-width:1400px; margin:0 auto;">
+      <h3 style="font-size:1.8rem; font-weight:900; color:#FFF;">[무료 에디션] 전체 슬라이드 네비게이터</h3>
+      <button id="overviewCloseBtn" style="background:none; border:1px solid var(--border-subtle); color:#FFF; padding:0.5rem 1rem; border-radius:6px; cursor:pointer; font-weight:700;">닫기 (ESC)</button>
+    </div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+
+  <!-- Zero-CORS Pre-embedded Kakao Audio Data (Supports file:/// direct double-click) -->
+  <script src="assets/audio/kakao_data.js"></script>
+  <script src="free.js"></script>
+</body>
+</html>

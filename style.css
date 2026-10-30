@@ -2143,10 +2143,76 @@ body {
   box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
 }
 
-/* Auth Profile Header */
+/* Auth Profile Header & Right Actions */
+.header-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .auth-state-box {
   display: flex;
   align-items: center;
+}
+
+/* Presentation Deck Header Button */
+.btn-header-presentation {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.16), rgba(6, 182, 212, 0.16));
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  color: #f1f5f9;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.2);
+  position: relative;
+}
+
+.btn-header-presentation:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.32), rgba(6, 182, 212, 0.32));
+  border-color: rgba(6, 182, 212, 0.75);
+  color: #ffffff;
+  box-shadow: 0 0 22px rgba(168, 85, 247, 0.45), 0 0 12px rgba(6, 182, 212, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-header-presentation .pres-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.btn-header-presentation .pres-text {
+  letter-spacing: -0.2px;
+}
+
+.btn-header-presentation .pres-pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #00f2fe;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00f2fe;
+  animation: pulsePresentationDot 2s infinite ease-in-out;
+}
+
+@keyframes pulsePresentationDot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.45);
+    opacity: 1;
+    box-shadow: 0 0 12px #00f2fe;
+  }
 }
 
 .btn-header-auth {
@@ -4473,6 +4539,11 @@ body, h1, h2, h3, h4, h5, h6, p, span, a, button, li,
     padding: 0 18px;
   }
 
+  .btn-header-presentation {
+    padding: 6px 11px !important;
+    font-size: 12px !important;
+  }
+
   /* View Hero Clearances below Fixed Header */
   .pro-hero-section,
   .free-hero-section,
@@ -4724,6 +4795,16 @@ body, h1, h2, h3, h4, h5, h6, p, span, a, button, li,
 
   .header-right-actions {
     gap: 6px !important;
+  }
+
+  .btn-header-presentation {
+    padding: 5px 9px !important;
+    font-size: 11px !important;
+    gap: 4px !important;
+  }
+
+  .btn-header-presentation .pres-pulse-dot {
+    display: none !important;
   }
 
   .btn-header-auth {
